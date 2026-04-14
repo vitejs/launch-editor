@@ -4,7 +4,8 @@
   "description": "express middleware for launching editor",
   "main": "index.js",
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "scripts": {
     "test": "node --test --experimental-test-module-mocks"
