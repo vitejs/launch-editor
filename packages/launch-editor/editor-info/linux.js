@@ -26,5 +26,6 @@ module.exports = {
   'goland.sh': 'goland',
   rider: 'rider',
   'rider.sh': 'rider',
-  zed: 'zed'
+  zed: 'zed',
+  windsurf: 'windsurf'
 }
