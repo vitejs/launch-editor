@@ -20,6 +20,7 @@ module.exports = {
   '/Applications/VSCodium.app/Contents/MacOS/Electron': 'codium',
   '/Applications/Cursor.app/Contents/MacOS/Cursor': 'cursor',
   '/Applications/Trae.app/Contents/MacOS/Electron': 'trae',
+  '/Applications/Trae CN.app/Contents/MacOS/Electron': 'trae-cn',
   '/Applications/Antigravity.app/Contents/MacOS/Electron': 'antigravity',
   '/Applications/AppCode.app/Contents/MacOS/appcode':
     '/Applications/AppCode.app/Contents/MacOS/appcode',

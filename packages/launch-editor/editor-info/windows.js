@@ -24,6 +24,7 @@ module.exports = [
   'rider.exe',
   'rider64.exe',
   'Trae.exe',
+  'Trae CN.exe',
   'zed.exe',
   'Antigravity.exe'
 ]

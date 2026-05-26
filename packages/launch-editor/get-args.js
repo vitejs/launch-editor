@@ -1,7 +1,7 @@
 const path = require('path')
 
 // normalize file/line numbers into command line args for specific editors
-module.exports = function getArgumentsForPosition (
+module.exports = function getArgumentsForPosition(
   editor,
   fileName,
   lineNumber,
@@ -40,6 +40,7 @@ module.exports = function getArgumentsForPosition (
     case 'Code - Insiders':
     case 'codium':
     case 'trae':
+    case 'trae-cn':
     case 'antigravity':
     case 'cursor':
     case 'vscodium':

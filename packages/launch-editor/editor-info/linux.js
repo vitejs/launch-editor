@@ -7,6 +7,7 @@ module.exports = {
   codium: 'codium',
   cursor: 'cursor',
   trae: 'trae',
+  'trae-cn': 'trae-cn',
   antigravity: 'antigravity',
   emacs: 'emacs',
   gvim: 'gvim',
