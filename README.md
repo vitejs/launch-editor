@@ -82,6 +82,8 @@ To launch files, send requests to the server like the following:
 | `vim`           | [Vim](http://www.vim.org/)                                             |  ✓    |         |       |
 | `visualstudio`  | [Visual Studio](https://www.visualstudio.com/vs/)                      |       |         |   ✓   |
 | `webstorm`      | [WebStorm](https://www.jetbrains.com/webstorm/)                        |  ✓    |   ✓     |   ✓   |
+| `trae`          | [Trae](https://www.trae.ai/)                                           |  ✓    |   ✓     |   ✓   |
+| `trae-cn`       | [Trae CN](https://www.trae.cn/)                                         |  ✓    |   ✓     |   ✓   |
 | `zed`           | [Zed](https://zed.dev/)                                                |  ✓    |   ✓     |   ✓   |
 
 ### Custom editor support
