@@ -1,12 +1,7 @@
 const path = require('path')
 
 // normalize file/line numbers into command line args for specific editors
-module.exports = function getArgumentsForPosition(
-  editor,
-  fileName,
-  lineNumber,
-  columnNumber = 1,
-) {
+module.exports = function getArgumentsForPosition(editor, fileName, lineNumber, columnNumber = 1) {
   const editorBasename = path.basename(editor).replace(/\.(exe|cmd|bat)$/i, '')
   switch (editorBasename) {
     case 'atom':

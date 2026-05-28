@@ -40,10 +40,7 @@ module.exports = function guessEditor(specifiedEditor) {
         if (processList.includes(processName)) {
           return [COMMON_EDITORS_MACOS[processName]]
         }
-        const processNameWithoutApplications = processName.replace(
-          '/Applications',
-          '',
-        )
+        const processNameWithoutApplications = processName.replace('/Applications', '')
         // Find editor installation not in /Applications.
         if (output.indexOf(processNameWithoutApplications) !== -1) {
           // Use the CLI command if one is specified

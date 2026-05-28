@@ -20,18 +20,12 @@ const getArgumentsForPosition = require('./get-args')
 function wrapErrorCallback(cb) {
   return (fileName, errorMessage) => {
     console.log()
-    console.log(
-      colors.red(
-        'Could not open ' + path.basename(fileName) + ' in the editor.',
-      ),
-    )
+    console.log(colors.red('Could not open ' + path.basename(fileName) + ' in the editor.'))
     if (errorMessage) {
       if (errorMessage[errorMessage.length - 1] !== '.') {
         errorMessage += '.'
       }
-      console.log(
-        colors.red('The editor process exited with an error: ' + errorMessage),
-      )
+      console.log(colors.red('The editor process exited with an error: ' + errorMessage))
     }
     console.log()
     if (cb) cb(fileName, errorMessage)
@@ -105,12 +99,7 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
   }
 
   if (lineNumber) {
-    const extraArgs = getArgumentsForPosition(
-      editor,
-      fileName,
-      lineNumber,
-      columnNumber,
-    )
+    const extraArgs = getArgumentsForPosition(editor, fileName, lineNumber, columnNumber)
     args.push.apply(args, extraArgs)
   } else {
     args.push(fileName)
@@ -165,9 +154,7 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
       }
       return str
     }
-    const launchCommand = [editor, ...args.map(escapeCmdArgs)]
-      .map(doubleQuoteIfNeeded)
-      .join(' ')
+    const launchCommand = [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
 
     _childProcess = childProcess.exec(launchCommand, {
       stdio: 'inherit',
