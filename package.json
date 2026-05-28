@@ -1,5 +1,4 @@
 {
-  "packageManager": "pnpm@10.4.1",
   "private": true,
   "scripts": {
     "test": "pnpm -r test",
@@ -16,9 +15,6 @@
     "oxfmt": "^0.52.0",
     "yorkie": "^1.0.3"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
   "lint-staged": {
     "*": [
       "oxfmt --no-error-on-unmatched-pattern"
@@ -27,5 +23,9 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "packageManager": "pnpm@10.4.1",
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   }
 }

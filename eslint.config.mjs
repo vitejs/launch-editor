@@ -1,4 +1,4 @@
-import js from "@eslint/js"
+import js from '@eslint/js'
 import globals from 'globals'
 
 export default [
@@ -6,7 +6,7 @@ export default [
   {
     files: ['packages/**/*.js'],
     languageOptions: {
-      ecmaVersion: 2018,  // Node.js 10
+      ecmaVersion: 2018, // Node.js 10
       sourceType: 'commonjs',
       globals: globals.node,
     },

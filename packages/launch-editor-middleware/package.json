@@ -2,28 +2,28 @@
   "name": "launch-editor-middleware",
   "version": "2.13.2",
   "description": "express middleware for launching editor",
-  "main": "index.js",
-  "files": [
-    "index.js"
+  "keywords": [
+    "editor",
+    "express",
+    "middleware"
   ],
-  "scripts": {
-    "test": "node --test --experimental-test-module-mocks"
+  "homepage": "https://github.com/yyx990803/launch-editor#readme",
+  "bugs": {
+    "url": "https://github.com/yyx990803/launch-editor/issues"
   },
+  "license": "MIT",
+  "author": "Evan You",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yyx990803/launch-editor.git"
   },
-  "keywords": [
-    "express",
-    "middleware",
-    "editor"
+  "files": [
+    "index.js"
   ],
-  "author": "Evan You",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/yyx990803/launch-editor/issues"
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test --experimental-test-module-mocks"
   },
-  "homepage": "https://github.com/yyx990803/launch-editor#readme",
   "dependencies": {
     "launch-editor": "workspace:^"
   }

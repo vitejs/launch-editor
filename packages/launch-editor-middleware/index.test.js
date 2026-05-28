@@ -38,7 +38,7 @@ describe('launchEditorMiddleware', () => {
     assert.equal(res.statusCode, 500)
     assert.equal(
       res.body,
-      'launch-editor-middleware: required query param "file" is missing.'
+      'launch-editor-middleware: required query param "file" is missing.',
     )
   })
 
@@ -66,7 +66,7 @@ describe('launchEditorMiddleware', () => {
     assert.equal(res.statusCode, 500)
     assert.equal(
       res.body,
-      'launch-editor-middleware: required query param "file" is missing.'
+      'launch-editor-middleware: required query param "file" is missing.',
     )
   })
 
