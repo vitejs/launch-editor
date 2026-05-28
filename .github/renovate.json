@@ -10,7 +10,5 @@
       "pinDigests": true
     }
   ],
-  "ignoreDeps": [
-    "node"
-  ]
+  "ignoreDeps": ["node"]
 }

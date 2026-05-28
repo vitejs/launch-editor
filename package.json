@@ -1,10 +1,10 @@
 {
-  "packageManager": "pnpm@10.4.1",
   "private": true,
   "scripts": {
     "test": "pnpm -r test",
     "release": "bumpp",
-    "lint": "eslint packages --fix"
+    "lint": "eslint packages --fix",
+    "format": "oxfmt"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -12,15 +12,20 @@
     "eslint": "^9.32.0",
     "globals": "^16.3.0",
     "lint-staged": "^6.1.1",
+    "oxfmt": "^0.52.0",
     "yorkie": "^1.0.3"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
   "lint-staged": {
+    "*": [
+      "oxfmt --no-error-on-unmatched-pattern"
+    ],
     "*.js": [
       "eslint --fix",
       "git add"
     ]
+  },
+  "packageManager": "pnpm@10.4.1",
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   }
 }

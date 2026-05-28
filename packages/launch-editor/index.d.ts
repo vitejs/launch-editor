@@ -10,7 +10,7 @@
 declare function launchEditor(
   file: string,
   specifiedEditor?: string | ((fileName: string, errorMessage: string | null) => void),
-  onErrorCallback?: (fileName: string, errorMessage: string | null) => void
-): void;
+  onErrorCallback?: (fileName: string, errorMessage: string | null) => void,
+): void
 
-export = launchEditor;
+export = launchEditor

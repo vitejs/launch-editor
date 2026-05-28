@@ -9,7 +9,7 @@ const COMMON_EDITORS_MACOS = require('./editor-info/macos')
 const COMMON_EDITORS_LINUX = require('./editor-info/linux')
 const COMMON_EDITORS_WIN = require('./editor-info/windows')
 
-module.exports = function guessEditor (specifiedEditor) {
+module.exports = function guessEditor(specifiedEditor) {
   if (specifiedEditor) {
     return shellQuote.parse(specifiedEditor)
   }
@@ -29,7 +29,7 @@ module.exports = function guessEditor (specifiedEditor) {
     if (process.platform === 'darwin') {
       const output = childProcess
         .execSync('ps x -o comm=', {
-          stdio: ['pipe', 'pipe', 'ignore']
+          stdio: ['pipe', 'pipe', 'ignore'],
         })
         .toString()
       const processNames = Object.keys(COMMON_EDITORS_MACOS)
@@ -49,7 +49,9 @@ module.exports = function guessEditor (specifiedEditor) {
           }
           // Use a partial match to find the running process path.  If one is found, use the
           // existing path since it can be running from anywhere.
-          const runningProcess = processList.find((procName) => procName.endsWith(processNameWithoutApplications))
+          const runningProcess = processList.find((procName) =>
+            procName.endsWith(processNameWithoutApplications),
+          )
           if (runningProcess !== undefined) {
             return [runningProcess]
           }
@@ -63,8 +65,8 @@ module.exports = function guessEditor (specifiedEditor) {
             'Get-CimInstance -Query \\"select executablepath from win32_process where executablepath is not null\\" | % { $_.ExecutablePath }' +
             '"',
           {
-            stdio: ['pipe', 'pipe', 'ignore']
-          }
+            stdio: ['pipe', 'pipe', 'ignore'],
+          },
         )
         .toString()
       const runningProcesses = output.split('\r\n')
@@ -82,7 +84,7 @@ module.exports = function guessEditor (specifiedEditor) {
       // -o comm Need only names column
       const output = childProcess
         .execSync('ps x --no-heading -o comm --sort=comm', {
-          stdio: ['pipe', 'pipe', 'ignore']
+          stdio: ['pipe', 'pipe', 'ignore'],
         })
         .toString()
       const processNames = Object.keys(COMMON_EDITORS_LINUX)
