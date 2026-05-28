@@ -74,6 +74,7 @@ To launch files, send requests to the server like the following:
 | `emacs`         | [Emacs](https://www.gnu.org/software/emacs/)                           |  ✓    |         |       |
 | `idea`          | [IDEA](https://www.jetbrains.com/idea/)                                |  ✓    |   ✓     |   ✓   |
 | `notepad++`     | [Notepad++](https://notepad-plus-plus.org/download/v7.5.4.html)        |       |   ✓     |       |
+| `nova`          | [Nova](https://nova.app)        |       |         |   ✓   |
 | `pycharm`       | [PyCharm](https://www.jetbrains.com/pycharm/)                          |  ✓    |   ✓     |   ✓   |
 | `phpstorm`      | [PhpStorm](https://www.jetbrains.com/phpstorm/)                        |  ✓    |   ✓     |   ✓   |
 | `rider`         | [Rider](https://www.jetbrains.com/rider/)                              |  ✓    |   ✓     |   ✓   |

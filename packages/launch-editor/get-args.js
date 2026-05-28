@@ -63,6 +63,8 @@ module.exports = function getArgumentsForPosition (
     case 'rider':
     case 'rider64':
       return ['--line', lineNumber, '--column', columnNumber, fileName]
+	case 'nova':
+	  return ['open', '--no-wait', '--line', `${lineNumber}:${columnNumber}`, fileName]
   }
 
   if (process.env.LAUNCH_EDITOR) {

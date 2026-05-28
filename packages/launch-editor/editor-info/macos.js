@@ -42,6 +42,7 @@ module.exports = {
   '/Applications/WebStorm.app/Contents/MacOS/webstorm':
     '/Applications/WebStorm.app/Contents/MacOS/webstorm',
   '/Applications/MacVim.app/Contents/MacOS/MacVim': 'mvim',
+  '/Applications/Nova.app/Contents/MacOS/Nova': 'nova',
   '/Applications/GoLand.app/Contents/MacOS/goland':
     '/Applications/GoLand.app/Contents/MacOS/goland',
   '/Applications/Rider.app/Contents/MacOS/rider':
