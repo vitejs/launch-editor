@@ -1,12 +1,7 @@
 const path = require('path')
 
 // normalize file/line numbers into command line args for specific editors
-module.exports = function getArgumentsForPosition (
-  editor,
-  fileName,
-  lineNumber,
-  columnNumber = 1
-) {
+module.exports = function getArgumentsForPosition(editor, fileName, lineNumber, columnNumber = 1) {
   const editorBasename = path.basename(editor).replace(/\.(exe|cmd|bat)$/i, '')
   switch (editorBasename) {
     case 'atom':
@@ -26,7 +21,7 @@ module.exports = function getArgumentsForPosition (
       return [`+call cursor(${lineNumber}, ${columnNumber})`, fileName]
     case 'joe':
     case 'gvim':
-      return ['+' + `${lineNumber}`, fileName]
+      return [`+${lineNumber}`, fileName]
     case 'emacs':
     case 'emacsclient':
       return [`+${lineNumber}:${columnNumber}`, fileName]

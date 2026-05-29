@@ -17,26 +17,22 @@ const childProcess = require('child_process')
 const guessEditor = require('./guess')
 const getArgumentsForPosition = require('./get-args')
 
-function wrapErrorCallback (cb) {
+function wrapErrorCallback(cb) {
   return (fileName, errorMessage) => {
     console.log()
-    console.log(
-      colors.red('Could not open ' + path.basename(fileName) + ' in the editor.')
-    )
+    console.log(colors.red('Could not open ' + path.basename(fileName) + ' in the editor.'))
     if (errorMessage) {
       if (errorMessage[errorMessage.length - 1] !== '.') {
         errorMessage += '.'
       }
-      console.log(
-        colors.red('The editor process exited with an error: ' + errorMessage)
-      )
+      console.log(colors.red('The editor process exited with an error: ' + errorMessage))
     }
     console.log()
     if (cb) cb(fileName, errorMessage)
   }
 }
 
-function isTerminalEditor (editor) {
+function isTerminalEditor(editor) {
   switch (editor) {
     case 'vim':
     case 'emacs':
@@ -47,7 +43,7 @@ function isTerminalEditor (editor) {
 }
 
 const positionRE = /:(\d+)(:(\d+))?$/
-function parseFile (file) {
+function parseFile(file) {
   // support `file://` protocol
   if (file.startsWith('file://')) {
     file = require('url').fileURLToPath(file)
@@ -60,13 +56,13 @@ function parseFile (file) {
   return {
     fileName,
     lineNumber,
-    columnNumber
+    columnNumber,
   }
 }
 
-let _childProcess = null
+let currentChildProcess = null
 
-function launchEditor (file, specifiedEditor, onErrorCallback) {
+function launchEditor(file, specifiedEditor, onErrorCallback) {
   const parsed = parseFile(file)
   let { fileName } = parsed
   const { lineNumber, columnNumber } = parsed
@@ -109,11 +105,11 @@ function launchEditor (file, specifiedEditor, onErrorCallback) {
     args.push(fileName)
   }
 
-  if (_childProcess && isTerminalEditor(editor)) {
+  if (currentChildProcess && isTerminalEditor(editor)) {
     // There's an existing editor process already and it's attached
     // to the terminal, so go kill it. Otherwise two separate editor
     // instances attach to the stdin/stdout which gets confusing.
-    _childProcess.kill('SIGKILL')
+    currentChildProcess.kill('SIGKILL')
   }
 
   if (process.platform === 'win32') {
@@ -139,7 +135,7 @@ function launchEditor (file, specifiedEditor, onErrorCallback) {
     // According to https://ss64.com/nt/syntax-esc.html,
     // we can use `^` to escape `&`, `<`, `>`, `|`, `%`, and `^`
     // I'm not sure if we have to escape all of these, but let's do it anyway
-    function escapeCmdArgs (cmdArgs) {
+    function escapeCmdArgs(cmdArgs) {
       return cmdArgs.replace(/([&|<>,;=^])/g, '^$1')
     }
 
@@ -155,34 +151,32 @@ function launchEditor (file, specifiedEditor, onErrorCallback) {
         return `^"${str}^"`
       } else if (str.includes(' ')) {
         return `"${str}"`
-      } 
+      }
       return str
     }
-    const launchCommand = [editor, ...args.map(escapeCmdArgs)]
-      .map(doubleQuoteIfNeeded)
-      .join(' ')
+    const launchCommand = [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
 
-    _childProcess = childProcess.exec(launchCommand, {
+    currentChildProcess = childProcess.exec(launchCommand, {
       stdio: 'inherit',
-      shell: true
+      shell: true,
     })
   } else {
-    _childProcess = childProcess.spawn(editor, args, { stdio: 'inherit' })
+    currentChildProcess = childProcess.spawn(editor, args, { stdio: 'inherit' })
   }
-  _childProcess.on('exit', function (errorCode) {
-    _childProcess = null
+  currentChildProcess.on('exit', function (errorCode) {
+    currentChildProcess = null
 
     if (errorCode) {
       onErrorCallback(fileName, '(code ' + errorCode + ')')
     }
   })
 
-  _childProcess.on('error', function (error) {
+  currentChildProcess.on('error', function (error) {
     let { code, message } = error
     if ('ENOENT' === code) {
       message = `${message} ('${editor}' command does not exist in 'PATH')`
     }
-    onErrorCallback(fileName, message);
+    onErrorCallback(fileName, message)
   })
 }
 

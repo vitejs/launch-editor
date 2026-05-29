@@ -13,18 +13,15 @@ module.exports = {
     '/Applications/Sublime Text Dev.app/Contents/SharedSupport/bin/subl',
   '/Applications/Visual Studio Code.app/Contents/MacOS/Code': 'code',
   '/Applications/Visual Studio Code.app/Contents/MacOS/Electron': 'code',
-  '/Applications/Visual Studio Code - Insiders.app/Contents/MacOS/Code - Insiders':
-    'code-insiders',
-  '/Applications/Visual Studio Code - Insiders.app/Contents/MacOS/Electron':
-    'code-insiders',
+  '/Applications/Visual Studio Code - Insiders.app/Contents/MacOS/Code - Insiders': 'code-insiders',
+  '/Applications/Visual Studio Code - Insiders.app/Contents/MacOS/Electron': 'code-insiders',
   '/Applications/VSCodium.app/Contents/MacOS/Electron': 'codium',
   '/Applications/Cursor.app/Contents/MacOS/Cursor': 'cursor',
   '/Applications/Trae.app/Contents/MacOS/Electron': 'trae',
   '/Applications/Antigravity.app/Contents/MacOS/Electron': 'antigravity',
   '/Applications/AppCode.app/Contents/MacOS/appcode':
     '/Applications/AppCode.app/Contents/MacOS/appcode',
-  '/Applications/CLion.app/Contents/MacOS/clion':
-    '/Applications/CLion.app/Contents/MacOS/clion',
+  '/Applications/CLion.app/Contents/MacOS/clion': '/Applications/CLion.app/Contents/MacOS/clion',
   '/Applications/IntelliJ IDEA.app/Contents/MacOS/idea':
     '/Applications/IntelliJ IDEA.app/Contents/MacOS/idea',
   '/Applications/IntelliJ IDEA Ultimate.app/Contents/MacOS/idea':
@@ -44,7 +41,6 @@ module.exports = {
   '/Applications/MacVim.app/Contents/MacOS/MacVim': 'mvim',
   '/Applications/GoLand.app/Contents/MacOS/goland':
     '/Applications/GoLand.app/Contents/MacOS/goland',
-  '/Applications/Rider.app/Contents/MacOS/rider':
-    '/Applications/Rider.app/Contents/MacOS/rider',
-  '/Applications/Zed.app/Contents/MacOS/zed': 'zed'
+  '/Applications/Rider.app/Contents/MacOS/rider': '/Applications/Rider.app/Contents/MacOS/rider',
+  '/Applications/Zed.app/Contents/MacOS/zed': 'zed',
 }

@@ -1,4 +1,4 @@
-type ErrorCallback = (fileName: string, errorMessage: string | null) => void;
+type ErrorCallback = (fileName: string, errorMessage: string | null) => void
 
 /**
  * Launch an editor to open a file at a specific line and column.
@@ -7,7 +7,7 @@ type ErrorCallback = (fileName: string, errorMessage: string | null) => void;
  *   "/path/to/file.js:10:2").
  * @param onErrorCallback Optional callback for handling errors.
  */
-declare function launchEditor(file: string, onErrorCallback?: ErrorCallback): void;
+declare function launchEditor(file: string, onErrorCallback?: ErrorCallback): void
 
 /**
  * Launch an editor to open a file at a specific line and column.
@@ -21,7 +21,7 @@ declare function launchEditor(file: string, onErrorCallback?: ErrorCallback): vo
 declare function launchEditor(
   file: string,
   specifiedEditor?: string,
-  onErrorCallback?: ErrorCallback
-): void;
+  onErrorCallback?: ErrorCallback,
+): void
 
-export = launchEditor;
+export = launchEditor

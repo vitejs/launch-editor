@@ -36,10 +36,7 @@ describe('launchEditorMiddleware', () => {
     middleware(req, res)
 
     assert.equal(res.statusCode, 500)
-    assert.equal(
-      res.body,
-      'launch-editor-middleware: required query param "file" is missing.'
-    )
+    assert.equal(res.body, 'launch-editor-middleware: required query param "file" is missing.')
   })
 
   test('launches editor with specified file', async () => {
@@ -64,10 +61,7 @@ describe('launchEditorMiddleware', () => {
     middleware(req, res)
 
     assert.equal(res.statusCode, 500)
-    assert.equal(
-      res.body,
-      'launch-editor-middleware: required query param "file" is missing.'
-    )
+    assert.equal(res.body, 'launch-editor-middleware: required query param "file" is missing.')
   })
 
   test('returns 500 on invalid URL', async () => {
