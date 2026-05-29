@@ -6,15 +6,15 @@
     "editor",
     "launch"
   ],
-  "homepage": "https://github.com/yyx990803/launch-editor#readme",
+  "homepage": "https://github.com/vitejs/launch-editor#readme",
   "bugs": {
-    "url": "https://github.com/yyx990803/launch-editor/issues"
+    "url": "https://github.com/vitejs/launch-editor/issues"
   },
   "license": "MIT",
   "author": "Evan You",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yyx990803/launch-editor.git"
+    "url": "git+https://github.com/vitejs/launch-editor.git"
   },
   "main": "index.js",
   "dependencies": {
