@@ -7,10 +7,13 @@ on:
 
 jobs:
   publish:
+    # prevents this action from running on forks
+    if: github.repository == 'vitejs/launch-editor'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
+    environment: Release
 
     steps:
       - name: Checkout repository
@@ -30,6 +33,9 @@ jobs:
           registry-url: https://registry.npmjs.org
           # disable cache, to avoid cache poisoning (https://docs.zizmor.sh/audits/#cache-poisoning)
           package-manager-cache: false
+
+      - name: Disallow installation scripts
+        run: yq '.allowBuilds[]=false' -i pnpm-workspace.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
