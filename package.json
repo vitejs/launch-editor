@@ -7,10 +7,7 @@
     "format": "oxfmt"
   },
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
     "bumpp": "^11.0.1",
-    "eslint": "^9.32.0",
-    "globals": "^16.3.0",
     "lint-staged": "^6.1.1",
     "oxfmt": "^0.52.0",
     "oxlint": "^1.67.0",
