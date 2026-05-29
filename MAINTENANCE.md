@@ -39,8 +39,8 @@ It will:
 Both packages need to trust the GitHub Actions workflow in this repository:
 
 ```bash
-npm trust github launch-editor --repo yyx990803/launch-editor --file publish.yml
-npm trust github launch-editor-middleware --repo yyx990803/launch-editor --file publish.yml
+npm trust github launch-editor --repo vitejs/launch-editor --file publish.yml
+npm trust github launch-editor-middleware --repo vitejs/launch-editor --file publish.yml
 ```
 
 This only needs to be done once per package unless the workflow file is renamed or the publishing setup changes.
