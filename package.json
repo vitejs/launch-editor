@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "bumpp": "^11.0.1",
-    "lint-staged": "^6.1.1",
+    "lint-staged": "^17.0.5",
     "oxfmt": "^0.52.0",
     "oxlint": "^1.67.0",
     "yorkie": "^2.0.0"
@@ -18,8 +18,7 @@
       "oxfmt --no-error-on-unmatched-pattern"
     ],
     "*.js": [
-      "oxlint --fix",
-      "git add"
+      "oxlint --fix"
     ]
   },
   "packageManager": "pnpm@10.4.1",
