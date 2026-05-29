@@ -34,3 +34,6 @@ jobs:
 
       - name: Check formatting
         run: pnpm format --check
+
+      - name: Check linting
+        run: pnpm oxlint

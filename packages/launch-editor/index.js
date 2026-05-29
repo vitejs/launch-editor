@@ -60,7 +60,7 @@ function parseFile(file) {
   }
 }
 
-let _childProcess = null
+let currentChildProcess = null
 
 function launchEditor(file, specifiedEditor, onErrorCallback) {
   const parsed = parseFile(file)
@@ -105,11 +105,11 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
     args.push(fileName)
   }
 
-  if (_childProcess && isTerminalEditor(editor)) {
+  if (currentChildProcess && isTerminalEditor(editor)) {
     // There's an existing editor process already and it's attached
     // to the terminal, so go kill it. Otherwise two separate editor
     // instances attach to the stdin/stdout which gets confusing.
-    _childProcess.kill('SIGKILL')
+    currentChildProcess.kill('SIGKILL')
   }
 
   if (process.platform === 'win32') {
@@ -156,22 +156,22 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
     }
     const launchCommand = [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
 
-    _childProcess = childProcess.exec(launchCommand, {
+    currentChildProcess = childProcess.exec(launchCommand, {
       stdio: 'inherit',
       shell: true,
     })
   } else {
-    _childProcess = childProcess.spawn(editor, args, { stdio: 'inherit' })
+    currentChildProcess = childProcess.spawn(editor, args, { stdio: 'inherit' })
   }
-  _childProcess.on('exit', function (errorCode) {
-    _childProcess = null
+  currentChildProcess.on('exit', function (errorCode) {
+    currentChildProcess = null
 
     if (errorCode) {
       onErrorCallback(fileName, '(code ' + errorCode + ')')
     }
   })
 
-  _childProcess.on('error', function (error) {
+  currentChildProcess.on('error', function (error) {
     let { code, message } = error
     if ('ENOENT' === code) {
       message = `${message} ('${editor}' command does not exist in 'PATH')`
