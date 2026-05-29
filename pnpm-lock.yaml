@@ -21,8 +21,8 @@ importers:
         specifier: ^1.67.0
         version: 1.67.0
       yorkie:
-        specifier: ^1.0.3
-        version: 1.0.3
+        specifier: ^2.0.0
+        version: 2.0.0
 
   packages/launch-editor:
     dependencies:
@@ -791,8 +791,8 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
-  yorkie@1.0.3:
-    resolution: {integrity: sha512-D6MU1N72vv/as9VvDBS8syz8FS9gDPUwP6ILp/vU/PYnTdHrK4qeC7qNabc/CrEtI4mNpWX2dxVvzktQBh8BAA==}
+  yorkie@2.0.0:
+    resolution: {integrity: sha512-jcKpkthap6x63MB4TxwCyuIGkV0oYP/YRyuQU5UO0Yz/E/ZAu+653/uov+phdmO54n6BcvFRyyt0RRrWdN2mpw==}
     engines: {node: '>=4'}
 
 snapshots:
@@ -1426,7 +1426,7 @@ snapshots:
 
   yaml@2.8.3: {}
 
-  yorkie@1.0.3:
+  yorkie@2.0.0:
     dependencies:
       execa: 0.8.0
       is-ci: 1.2.1
