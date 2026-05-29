@@ -21,7 +21,7 @@ module.exports = function getArgumentsForPosition(editor, fileName, lineNumber, 
       return [`+call cursor(${lineNumber}, ${columnNumber})`, fileName]
     case 'joe':
     case 'gvim':
-      return ['+' + `${lineNumber}`, fileName]
+      return [`+${lineNumber}`, fileName]
     case 'emacs':
     case 'emacsclient':
       return [`+${lineNumber}:${columnNumber}`, fileName]

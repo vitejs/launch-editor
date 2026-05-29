@@ -3,7 +3,7 @@
   "scripts": {
     "test": "pnpm -r test",
     "release": "bumpp",
-    "lint": "eslint packages --fix",
+    "lint": "oxlint --fix",
     "format": "oxfmt"
   },
   "devDependencies": {
@@ -13,6 +13,7 @@
     "globals": "^16.3.0",
     "lint-staged": "^6.1.1",
     "oxfmt": "^0.52.0",
+    "oxlint": "^1.67.0",
     "yorkie": "^1.0.3"
   },
   "lint-staged": {
@@ -20,7 +21,7 @@
       "oxfmt --no-error-on-unmatched-pattern"
     ],
     "*.js": [
-      "eslint --fix",
+      "oxlint --fix",
       "git add"
     ]
   },
