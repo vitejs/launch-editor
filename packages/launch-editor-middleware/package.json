@@ -18,7 +18,8 @@
     "url": "git+https://github.com/vitejs/launch-editor.git"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "main": "index.js",
   "scripts": {
