@@ -87,14 +87,6 @@ describe('getArgumentsForPosition', () => {
   })
 
   describe('editor resolution via path.basename and extension stripping', () => {
-    test('resolves a full Windows path with .exe', () => {
-      assert.deepEqual(getArgumentsForPosition('C:\\path\\Code.exe', 'file', 10, 5), [
-        '-r',
-        '-g',
-        'file:10:5',
-      ])
-    })
-
     test('resolves a full POSIX path', () => {
       assert.deepEqual(getArgumentsForPosition('/usr/local/bin/code', 'file', 10, 5), [
         '-r',
@@ -103,13 +95,23 @@ describe('getArgumentsForPosition', () => {
       ])
     })
 
-    test('resolves notepad++ from a full path with .exe', () => {
-      assert.deepEqual(getArgumentsForPosition('C:\\tools\\notepad++.exe', 'file', 10, 5), [
-        '-n10',
-        '-c5',
-        'file',
-      ])
-    })
+    if (process.platform === 'win32') {
+      test('resolves a full Windows path with .exe', () => {
+        assert.deepEqual(getArgumentsForPosition('C:\\path\\Code.exe', 'file', 10, 5), [
+          '-r',
+          '-g',
+          'file:10:5',
+        ])
+      })
+
+      test('resolves notepad++ from a full path with .exe', () => {
+        assert.deepEqual(getArgumentsForPosition('C:\\tools\\notepad++.exe', 'file', 10, 5), [
+          '-n10',
+          '-c5',
+          'file',
+        ])
+      })
+    }
 
     test('strips .cmd extension case-insensitively', () => {
       assert.deepEqual(getArgumentsForPosition('code.CMD', 'file', 10, 5), [

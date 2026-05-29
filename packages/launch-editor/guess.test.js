@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict')
-const { describe, test, mock } = require('node:test')
+const { describe, test } = require('node:test')
 
 const guessEditor = require('./guess.js')
 const { getEditorFromMacProcesses, getEditorFromWindowsProcesses, getEditorFromLinuxProcesses } =
