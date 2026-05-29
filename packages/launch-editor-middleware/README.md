@@ -20,15 +20,7 @@ Both the line and column numbers are optional. `file://` URIs are also supported
 
 ## API
 
-```js
-launchMiddleware(specifiedEditor?, srcRoot?, onErrorCallback?)
-```
-
-The factory function accepts the following arguments (all optional, the callback can be in any position as long as it's the last argument):
-
-1. **`specifiedEditor`** — A specific editor bin to try first. Defaults to inferring from running processes, then falling back to env variables like `EDITOR` and `VISUAL`. See the [list of supported editors](https://github.com/vitejs/launch-editor#supported-editors).
-2. **`srcRoot`** — The root directory of source files, in case the file path is relative. Defaults to `process.cwd()`.
-3. **`onErrorCallback`** — A callback invoked when it fails to launch the editor, called with `(fileName, errorMessage)`.
+See [`index.d.ts`](./index.d.ts) for the full type definitions and the available arguments.
 
 ## Custom editor support
 
