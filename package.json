@@ -7,7 +7,7 @@
     "format": "oxfmt"
   },
   "devDependencies": {
-    "bumpp": "^11.0.1",
+    "bumpp": "^11.1.0",
     "lint-staged": "^17.0.5",
     "oxfmt": "^0.52.0",
     "oxlint": "^1.67.0",
@@ -21,7 +21,7 @@
       "oxlint --fix"
     ]
   },
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.34.1",
   "gitHooks": {
     "pre-commit": "lint-staged"
   }
