@@ -9,7 +9,60 @@ const COMMON_EDITORS_MACOS = require('./editor-info/macos')
 const COMMON_EDITORS_LINUX = require('./editor-info/linux')
 const COMMON_EDITORS_WIN = require('./editor-info/windows')
 
-module.exports = function guessEditor(specifiedEditor) {
+function getEditorFromMacProcesses(output) {
+  const processNames = Object.keys(COMMON_EDITORS_MACOS)
+  const processList = output.split('\n')
+  for (let i = 0; i < processNames.length; i++) {
+    const processName = processNames[i]
+    // Find editor by exact match.
+    if (processList.includes(processName)) {
+      return COMMON_EDITORS_MACOS[processName]
+    }
+    const processNameWithoutApplications = processName.replace('/Applications', '')
+    // Find editor installation not in /Applications.
+    if (output.indexOf(processNameWithoutApplications) !== -1) {
+      // Use the CLI command if one is specified
+      if (processName !== COMMON_EDITORS_MACOS[processName]) {
+        return COMMON_EDITORS_MACOS[processName]
+      }
+      // Use a partial match to find the running process path.  If one is found, use the
+      // existing path since it can be running from anywhere.
+      const runningProcess = processList.find((procName) =>
+        procName.endsWith(processNameWithoutApplications),
+      )
+      if (runningProcess !== undefined) {
+        return runningProcess
+      }
+    }
+  }
+  return undefined
+}
+
+function getEditorFromWindowsProcesses(output) {
+  const runningProcesses = output.split('\r\n')
+  for (let i = 0; i < runningProcesses.length; i++) {
+    const fullProcessPath = runningProcesses[i].trim()
+    const shortProcessName = path.win32.basename(fullProcessPath)
+
+    if (COMMON_EDITORS_WIN.indexOf(shortProcessName) !== -1) {
+      return fullProcessPath
+    }
+  }
+  return undefined
+}
+
+function getEditorFromLinuxProcesses(output) {
+  const processNames = Object.keys(COMMON_EDITORS_LINUX)
+  for (let i = 0; i < processNames.length; i++) {
+    const processName = processNames[i]
+    if (output.indexOf(processName) !== -1) {
+      return COMMON_EDITORS_LINUX[processName]
+    }
+  }
+  return undefined
+}
+
+function guessEditor(specifiedEditor) {
   if (specifiedEditor) {
     return shellQuote.parse(specifiedEditor)
   }
@@ -32,30 +85,9 @@ module.exports = function guessEditor(specifiedEditor) {
           stdio: ['pipe', 'pipe', 'ignore'],
         })
         .toString()
-      const processNames = Object.keys(COMMON_EDITORS_MACOS)
-      const processList = output.split('\n')
-      for (let i = 0; i < processNames.length; i++) {
-        const processName = processNames[i]
-        // Find editor by exact match.
-        if (processList.includes(processName)) {
-          return [COMMON_EDITORS_MACOS[processName]]
-        }
-        const processNameWithoutApplications = processName.replace('/Applications', '')
-        // Find editor installation not in /Applications.
-        if (output.indexOf(processNameWithoutApplications) !== -1) {
-          // Use the CLI command if one is specified
-          if (processName !== COMMON_EDITORS_MACOS[processName]) {
-            return [COMMON_EDITORS_MACOS[processName]]
-          }
-          // Use a partial match to find the running process path.  If one is found, use the
-          // existing path since it can be running from anywhere.
-          const runningProcess = processList.find((procName) =>
-            procName.endsWith(processNameWithoutApplications),
-          )
-          if (runningProcess !== undefined) {
-            return [runningProcess]
-          }
-        }
+      const editor = getEditorFromMacProcesses(output)
+      if (editor !== undefined) {
+        return [editor]
       }
     } else if (process.platform === 'win32') {
       const output = childProcess
@@ -69,14 +101,9 @@ module.exports = function guessEditor(specifiedEditor) {
           },
         )
         .toString()
-      const runningProcesses = output.split('\r\n')
-      for (let i = 0; i < runningProcesses.length; i++) {
-        const fullProcessPath = runningProcesses[i].trim()
-        const shortProcessName = path.basename(fullProcessPath)
-
-        if (COMMON_EDITORS_WIN.indexOf(shortProcessName) !== -1) {
-          return [fullProcessPath]
-        }
+      const editor = getEditorFromWindowsProcesses(output)
+      if (editor !== undefined) {
+        return [editor]
       }
     } else if (process.platform === 'linux') {
       // --no-heading No header line
@@ -87,12 +114,9 @@ module.exports = function guessEditor(specifiedEditor) {
           stdio: ['pipe', 'pipe', 'ignore'],
         })
         .toString()
-      const processNames = Object.keys(COMMON_EDITORS_LINUX)
-      for (let i = 0; i < processNames.length; i++) {
-        const processName = processNames[i]
-        if (output.indexOf(processName) !== -1) {
-          return [COMMON_EDITORS_LINUX[processName]]
-        }
+      const editor = getEditorFromLinuxProcesses(output)
+      if (editor !== undefined) {
+        return [editor]
       }
     }
   } catch (ignoreError) {
@@ -108,3 +132,8 @@ module.exports = function guessEditor(specifiedEditor) {
 
   return [null]
 }
+
+module.exports = guessEditor
+module.exports.getEditorFromMacProcesses = getEditorFromMacProcesses
+module.exports.getEditorFromWindowsProcesses = getEditorFromWindowsProcesses
+module.exports.getEditorFromLinuxProcesses = getEditorFromLinuxProcesses
