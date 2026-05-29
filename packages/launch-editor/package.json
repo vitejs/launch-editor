@@ -17,6 +17,9 @@
     "url": "git+https://github.com/vitejs/launch-editor.git"
   },
   "main": "index.js",
+  "scripts": {
+    "test": "node --test --experimental-test-module-mocks"
+  },
   "dependencies": {
     "picocolors": "^1.1.1",
     "shell-quote": "^1.8.4"
