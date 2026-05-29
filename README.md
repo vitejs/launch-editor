@@ -109,3 +109,15 @@ column=$3
 # call your editor with whatever args it expects
 my-editor -l $line -c $column -f $filename
 ```
+
+## UNC paths on Windows
+
+On Windows, `launch-editor` refuses to open files whose resolved path is a [UNC path](https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#unc-paths), that is, a path that starts with `\\`, such as `\\server\share\file.js`.
+
+When a UNC path points at a remote host, any filesystem operation `launch-editor` performs on it (such as the `fs.existsSync` check used to verify the file before launching the editor) causes Windows to connect to that host over SMB. An attacker who controls the requested file path could point it at a server they control and abuse this to leak the current user's NTLM credentials: Windows automatically attempts NTLM authentication against the remote host, sending the user's NTLM challenge-response, which the attacker can capture for offline cracking or relay to another service (an NTLM relay attack). Because the file path frequently originates from untrusted input (for example, the `file` query parameter handled by `launch-editor-middleware`), `launch-editor` rejects UNC paths up front so it never performs any filesystem operation on them.
+
+When a UNC path is rejected, the error callback is invoked with:
+
+> UNC paths are not supported on Windows to avoid security issues.
+
+If you need to edit a file on a network share, map the share to a drive letter first and pass that path (e.g. `Z:\file.js`) instead.
