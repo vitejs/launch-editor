@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict')
-const { describe, test, afterEach, mock } = require('node:test')
+const { describe, test, mock } = require('node:test')
 
 const launchEditor = require('./index.js')
 
