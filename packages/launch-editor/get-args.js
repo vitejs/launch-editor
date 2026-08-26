@@ -36,6 +36,8 @@ module.exports = function getArgumentsForPosition(editor, fileName, lineNumber, 
     case 'codium':
     case 'trae':
     case 'antigravity':
+    case 'breezell':
+    case 'Breezell':
     case 'cursor':
     case 'vscodium':
     case 'VSCodium':
