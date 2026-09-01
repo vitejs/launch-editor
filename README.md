@@ -94,6 +94,11 @@ You can use the `LAUNCH_EDITOR` environment variable
 LAUNCH_EDITOR=codium
 ```
 
+For VSCode users, to easily add an enviroment variable to the terminal config, 
+![resim](https://github.com/Kambaa/launch-editor/assets/5601326/86648e57-29fc-42a0-9717-0e9b2041605c)
+valus can be the names listed above. For more information, read about vscode custom env setup [here](https://code.visualstudio.com/docs/terminal/profiles#_configuring-profiles)
+
+
 #### to run a custom launch script
 
 ```bash
