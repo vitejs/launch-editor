@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict')
+const os = require('node:os')
 const { describe, test } = require('node:test')
 
 const getArgumentsForFile = require('./get-args.js')
@@ -6,6 +7,15 @@ const getArgumentsForFile = require('./get-args.js')
 describe('getArgumentsForFile', () => {
   test('uses the file name as the only argument when no position is given', () => {
     assert.deepEqual(getArgumentsForFile('vim', 'file'), ['file'])
+  })
+
+  test('uses a relative path for files on a Windows drive in WSL', (t) => {
+    t.mock.property(process, 'platform', 'linux')
+    t.mock.method(process, 'cwd', () => '/home/user/project')
+    t.mock.method(os, 'release', () => '4.4.0-43-Microsoft')
+
+    const fileName = '/mnt/c/project/file.js'
+    assert.deepEqual(getArgumentsForFile('vim', fileName), ['../../../mnt/c/project/file.js'])
   })
 
   describe('editor-specific argument formats', () => {
