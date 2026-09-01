@@ -143,7 +143,7 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
       }
       return str
     }
-    const launchCommand = [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
+    const launchCommand = [editor, ...args].map(escapeCmdArgs).map(doubleQuoteIfNeeded).join(' ')
 
     currentChildProcess = childProcess.exec(launchCommand, {
       stdio: 'inherit',
