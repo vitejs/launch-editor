@@ -15,7 +15,7 @@ const colors = require('picocolors')
 const childProcess = require('child_process')
 
 const guessEditor = require('./guess')
-const getArgumentsForPosition = require('./get-args')
+const getArgumentsForFile = require('./get-args')
 
 function wrapErrorCallback(cb) {
   return (fileName, errorMessage) => {
@@ -106,12 +106,8 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
     fileName = path.relative('', fileName)
   }
 
-  if (lineNumber) {
-    const extraArgs = getArgumentsForPosition(editor, fileName, lineNumber, columnNumber)
-    args.push.apply(args, extraArgs)
-  } else {
-    args.push(fileName)
-  }
+  const extraArgs = getArgumentsForFile(editor, fileName, lineNumber, columnNumber)
+  args.push.apply(args, extraArgs)
 
   if (currentChildProcess && isTerminalEditor(editor)) {
     // There's an existing editor process already and it's attached
