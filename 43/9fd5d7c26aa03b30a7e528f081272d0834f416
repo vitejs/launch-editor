@@ -1,0 +1,21 @@
+packages/launch-editor/get-args.js
+  s_0c56c115e1d69d::t_6987cc02f36c35 1,6-19
+packages/launch-editor/get-args.test.js
+  s_0c56c115e1d69d::t_964ca0d3459cf3 2,12-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "439fd5d7c26aa03b30a7e528f081272d0834f416",
+  "prompts": {},
+  "sessions": {
+    "s_0c56c115e1d69d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a05bbe-0698-7ec1-9663-4bc5bf11b2bf",
+        "model": "unknown"
+      },
+      "human_author": "sapphi-red <green@sapphi.red>"
+    }
+  }
+}
