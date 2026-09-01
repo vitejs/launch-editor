@@ -58,6 +58,7 @@ module.exports = function getArgumentsForFile(editor, fileName, lineNumber, colu
     case 'cursor':
     case 'vscodium':
     case 'VSCodium':
+    case 'windsurf':
       return ['-r', '-g', `${fileName}:${lineNumber}:${columnNumber}`]
     case 'appcode':
     case 'clion':
