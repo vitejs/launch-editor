@@ -19,6 +19,7 @@ module.exports = {
   '/Applications/Cursor.app/Contents/MacOS/Cursor': 'cursor',
   '/Applications/Trae.app/Contents/MacOS/Electron': 'trae',
   '/Applications/Antigravity.app/Contents/MacOS/Electron': 'antigravity',
+  '/Applications/Breezell.app/Contents/MacOS/Electron': 'breezell',
   '/Applications/AppCode.app/Contents/MacOS/appcode':
     '/Applications/AppCode.app/Contents/MacOS/appcode',
   '/Applications/CLion.app/Contents/MacOS/clion': '/Applications/CLion.app/Contents/MacOS/clion',
