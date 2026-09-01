@@ -10,7 +10,11 @@ describe('getArgumentsForFile', () => {
   })
 
   test('uses a relative path for files on a Windows drive in WSL', (t) => {
-    t.mock.property(process, 'platform', 'linux')
+    if (process.platform !== 'linux') {
+      t.skip('not running on Linux')
+      return
+    }
+
     t.mock.method(process, 'cwd', () => '/home/user/project')
     t.mock.method(os, 'release', () => '4.4.0-43-Microsoft')
 
