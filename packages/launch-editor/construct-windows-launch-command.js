@@ -21,7 +21,7 @@
 // we can use `^` to escape `&`, `<`, `>`, `|`, `%`, and `^`
 // I'm not sure if we have to escape all of these, but let's do it anyway
 function escapeCmdArgs(cmdArgs) {
-  return cmdArgs.replace(/([&|<>,;=^])/g, '^$1')
+  return cmdArgs.replace(/([&|<>,;=^%])/g, '^$1')
 }
 
 // Need to double quote the editor path in case it contains spaces;

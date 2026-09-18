@@ -35,8 +35,15 @@ describe('constructWindowsLaunchCommand', () => {
 
   test('escapes CMD metacharacters in arguments', () => {
     assert.equal(
-      constructWindowsLaunchCommand('code', ['C:\\project\\&|<>,;=^file.js']),
-      'code ^"C:\\project\\^&^|^<^>^,^;^=^^file.js^"',
+      constructWindowsLaunchCommand('code', ['C:\\project\\&|<>,;=^%file.js']),
+      'code ^"C:\\project\\^&^|^<^>^,^;^=^^^%file.js^"',
+    )
+  })
+
+  test('escapes every percent sign in arguments', () => {
+    assert.equal(
+      constructWindowsLaunchCommand('code', ['C:\\%TEMP%\\file.js']),
+      'code ^"C:\\^%TEMP^%\\file.js^"',
     )
   })
 
