@@ -19,7 +19,9 @@
 
 // According to https://ss64.com/nt/syntax-esc.html,
 // we can use `^` to escape `&`, `<`, `>`, `|`, `%`, and `^`
-// I'm not sure if we have to escape all of these, but let's do it anyway
+//
+// `"` cannot appear in Windows paths, so it is outside the untrusted path input
+// this sanitization protects.
 function escapeCmdArgs(cmdArgs) {
   return cmdArgs.replace(/([&|<>,;=^%])/g, '^$1')
 }
