@@ -23,7 +23,7 @@
 // `"` cannot appear in Windows paths, so it is outside the untrusted path input
 // this sanitization protects.
 function escapeCmdArgs(cmdArgs) {
-  return cmdArgs.replace(/([&|<>,;=^%])/g, '^$1')
+  return cmdArgs.replace(/([&|<>,;=^])/g, '^$1')
 }
 
 // Need to double quote the editor path in case it contains spaces;
@@ -49,15 +49,10 @@ function constructWindowsLaunchCommand(editor, args) {
     throw new Error('Cannot launch an editor with an argument containing a line break')
   }
 
-  // `%` is valid in Windows file names, so rejecting it unconditionally would break
-  // legitimate paths. Escaping `%NAME%` produces `^%NAME^%`, but CMD expands environment
-  // variables before consuming caret escapes. A matching `NAME^` variable could therefore
-  // reintroduce command syntax, so reject only when both conditions make expansion possible.
-  const hasCaretEnvironmentVariable = Object.keys(process.env).some((name) => name.includes('^'))
-  if (hasCaretEnvironmentVariable && args.some((arg) => arg.includes('%'))) {
-    throw new Error(
-      'Cannot launch an editor with an argument containing "%" when an environment variable name contains "^"',
-    )
+  // CMD expands expressions such as `%VAR:old=new%` before consuming caret escapes, so
+  // percent signs in arguments cannot be preserved safely and are rejected.
+  if (args.some((arg) => arg.includes('%'))) {
+    throw new Error('Cannot launch an editor with an argument containing "%"')
   }
 
   return [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')

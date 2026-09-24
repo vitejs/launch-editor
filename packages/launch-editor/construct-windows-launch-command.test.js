@@ -35,15 +35,8 @@ describe('constructWindowsLaunchCommand', () => {
 
   test('escapes CMD metacharacters in arguments', () => {
     assert.equal(
-      constructWindowsLaunchCommand('code', ['C:\\project\\&|<>,;=^%file.js']),
-      'code ^"C:\\project\\^&^|^<^>^,^;^=^^^%file.js^"',
-    )
-  })
-
-  test('escapes every percent sign in arguments', () => {
-    assert.equal(
-      constructWindowsLaunchCommand('code', ['C:\\%TEMP%\\file.js']),
-      'code ^"C:\\^%TEMP^%\\file.js^"',
+      constructWindowsLaunchCommand('code', ['C:\\project\\&|<>,;=^file.js']),
+      'code ^"C:\\project\\^&^|^<^>^,^;^=^^file.js^"',
     )
   })
 
@@ -59,14 +52,17 @@ describe('constructWindowsLaunchCommand', () => {
     })
   }
 
-  test('rejects percent signs when an environment variable name contains a caret', (t) => {
-    const environmentVariable = 'LAUNCH_EDITOR_TEST^'
-    process.env[environmentVariable] = 'value'
-    t.after(() => delete process.env[environmentVariable])
-
+  test('rejects percent signs in arguments', () => {
     assert.throws(
       () => constructWindowsLaunchCommand('code', ['C:\\project\\100%\\file.js']),
-      /argument containing "%" when an environment variable name contains "\^"/,
+      /argument containing "%"/,
+    )
+  })
+
+  test('rejects CMD variable modifiers', () => {
+    assert.throws(
+      () => constructWindowsLaunchCommand('code', ['C:\\project\\%VAR:old=new%']),
+      /argument containing "%"/,
     )
   })
 
