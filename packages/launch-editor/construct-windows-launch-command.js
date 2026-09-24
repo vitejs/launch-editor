@@ -41,6 +41,17 @@ function doubleQuoteIfNeeded(str) {
 }
 
 function constructWindowsLaunchCommand(editor, args) {
+  // `%` is valid in Windows file names, so rejecting it unconditionally would break
+  // legitimate paths. Escaping `%NAME%` produces `^%NAME^%`, but CMD expands environment
+  // variables before consuming caret escapes. A matching `NAME^` variable could therefore
+  // reintroduce command syntax, so reject only when both conditions make expansion possible.
+  const hasCaretEnvironmentVariable = Object.keys(process.env).some((name) => name.includes('^'))
+  if (hasCaretEnvironmentVariable && args.some((arg) => arg.includes('%'))) {
+    throw new Error(
+      'Cannot launch an editor with an argument containing "%" when an environment variable name contains "^"',
+    )
+  }
+
   return [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
 }
 

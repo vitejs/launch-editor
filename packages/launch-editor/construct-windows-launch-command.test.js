@@ -47,6 +47,17 @@ describe('constructWindowsLaunchCommand', () => {
     )
   })
 
+  test('rejects percent signs when an environment variable name contains a caret', (t) => {
+    const environmentVariable = 'LAUNCH_EDITOR_TEST^'
+    process.env[environmentVariable] = 'value'
+    t.after(() => delete process.env[environmentVariable])
+
+    assert.throws(
+      () => constructWindowsLaunchCommand('code', ['C:\\project\\100%\\file.js']),
+      /argument containing "%" when an environment variable name contains "\^"/,
+    )
+  })
+
   test('quotes arguments containing both spaces and escaped CMD metacharacters', () => {
     assert.equal(
       constructWindowsLaunchCommand('code', ['C:\\my project\\&file.js']),
