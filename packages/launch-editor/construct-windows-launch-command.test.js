@@ -47,6 +47,18 @@ describe('constructWindowsLaunchCommand', () => {
     )
   })
 
+  for (const [name, lineBreak] of [
+    ['carriage returns', '\r'],
+    ['line feeds', '\n'],
+  ]) {
+    test(`rejects ${name} in arguments`, () => {
+      assert.throws(
+        () => constructWindowsLaunchCommand('code', [`C:\\project\\file.js${lineBreak}calc.exe`]),
+        /argument containing a line break/,
+      )
+    })
+  }
+
   test('rejects percent signs when an environment variable name contains a caret', (t) => {
     const environmentVariable = 'LAUNCH_EDITOR_TEST^'
     process.env[environmentVariable] = 'value'

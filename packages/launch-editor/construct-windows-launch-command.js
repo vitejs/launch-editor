@@ -43,6 +43,12 @@ function doubleQuoteIfNeeded(str) {
 }
 
 function constructWindowsLaunchCommand(editor, args) {
+  // CMD treats line breaks as command separators. They cannot appear in regular Windows
+  // file names, but NTFS alternate data stream names may contain control characters.
+  if (args.some((arg) => /[\r\n]/.test(arg))) {
+    throw new Error('Cannot launch an editor with an argument containing a line break')
+  }
+
   // `%` is valid in Windows file names, so rejecting it unconditionally would break
   // legitimate paths. Escaping `%NAME%` produces `^%NAME^%`, but CMD expands environment
   // variables before consuming caret escapes. A matching `NAME^` variable could therefore
