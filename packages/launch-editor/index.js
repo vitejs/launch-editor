@@ -64,6 +64,13 @@ let currentChildProcess = null
 function launchEditor(file, specifiedEditor, onErrorCallback) {
   const { fileName, lineNumber, columnNumber } = parseFile(file)
 
+  if (typeof specifiedEditor === 'function') {
+    onErrorCallback = specifiedEditor
+    specifiedEditor = undefined
+  }
+
+  onErrorCallback = wrapErrorCallback(onErrorCallback)
+
   if (process.platform === 'win32' && path.resolve(fileName).startsWith('\\\\')) {
     return onErrorCallback(
       fileName,
@@ -75,13 +82,6 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
   if (!fs.existsSync(fileName)) {
     return
   }
-
-  if (typeof specifiedEditor === 'function') {
-    onErrorCallback = specifiedEditor
-    specifiedEditor = undefined
-  }
-
-  onErrorCallback = wrapErrorCallback(onErrorCallback)
 
   const [editor, ...args] = guessEditor(specifiedEditor)
   if (!editor) {
