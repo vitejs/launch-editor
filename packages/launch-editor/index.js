@@ -15,6 +15,7 @@ const childProcess = require('child_process')
 
 const guessEditor = require('./guess')
 const getArgumentsForFile = require('./get-args')
+const constructWindowsLaunchCommand = require('./construct-windows-launch-command')
 
 function wrapErrorCallback(cb) {
   return (fileName, errorMessage) => {
@@ -100,49 +101,7 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
   }
 
   if (process.platform === 'win32') {
-    // On Windows, we need to use `exec` with the `shell: true` option,
-    // and some more sanitization is required.
-
-    // However, CMD.exe on Windows is vulnerable to RCE attacks given a file name of the
-    // form "C:\Users\myusername\Downloads\& curl 172.21.93.52".
-    // `create-react-app` used a safe file name pattern to validate user-provided file names:
-    // - https://github.com/facebook/create-react-app/pull/4866
-    // - https://github.com/facebook/create-react-app/pull/5431
-    // But that's not a viable solution for this package because
-    // it's depended on by so many meta frameworks that heavily rely on
-    // special characters in file names for filesystem-based routing.
-    // We need to at least:
-    // - Support `+` because it's used in SvelteKit and Vike
-    // - Support `$` because it's used in Remix
-    // - Support `(` and `)` because they are used in Analog, SolidStart, and Vike
-    // - Support `@` because it's used in Vike
-    // - Support `[` and `]` because they are widely used for [slug]
-    // So here we choose to use `^` to escape special characters instead.
-
-    // According to https://ss64.com/nt/syntax-esc.html,
-    // we can use `^` to escape `&`, `<`, `>`, `|`, `%`, and `^`
-    // I'm not sure if we have to escape all of these, but let's do it anyway
-    function escapeCmdArgs(cmdArgs) {
-      return cmdArgs.replace(/([&|<>,;=^])/g, '^$1')
-    }
-
-    // Need to double quote the editor path in case it contains spaces;
-    // If the fileName contains spaces, we also need to double quote it in the arguments
-    // However, there's a case that it's concatenated with line number and column number
-    // which is separated by `:`. We need to double quote the whole string in this case.
-    // Also, if the string contains the escape character `^`, it needs to be quoted, too.
-    function doubleQuoteIfNeeded(str) {
-      if (str.includes('^')) {
-        // If a string includes an escaped character, not only does it need to be quoted,
-        // but the quotes need to be escaped too.
-        return `^"${str}^"`
-      } else if (str.includes(' ')) {
-        return `"${str}"`
-      }
-      return str
-    }
-    const launchCommand = [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
-
+    const launchCommand = constructWindowsLaunchCommand(editor, args)
     currentChildProcess = childProcess.exec(launchCommand, {
       stdio: 'inherit',
       shell: true,
