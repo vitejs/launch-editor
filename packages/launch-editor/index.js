@@ -62,9 +62,7 @@ function parseFile(file) {
 let currentChildProcess = null
 
 function launchEditor(file, specifiedEditor, onErrorCallback) {
-  const parsed = parseFile(file)
-  let { fileName } = parsed
-  const { lineNumber, columnNumber } = parsed
+  const { fileName, lineNumber, columnNumber } = parseFile(file)
 
   if (process.platform === 'win32' && path.resolve(fileName).startsWith('\\\\')) {
     return onErrorCallback(
