@@ -1,0 +1,21 @@
+packages/launch-editor/construct-windows-launch-command.js
+  s_d16332448a7345::t_b9242b0948bd17 1-47
+packages/launch-editor/construct-windows-launch-command.test.js
+  s_d16332448a7345::t_4d537e36d54d61 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9b43676a48ed98ff690232d9271ac409c54b2cd8",
+  "prompts": {},
+  "sessions": {
+    "s_d16332448a7345": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0fba1-755a-7b23-90b8-e86ea003da3c",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "sapphi-red <green@sapphi.red>"
+    }
+  }
+}
