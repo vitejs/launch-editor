@@ -26,4 +26,5 @@ module.exports = [
   'Trae.exe',
   'zed.exe',
   'Antigravity.exe',
+  'Breezell.exe',
 ]

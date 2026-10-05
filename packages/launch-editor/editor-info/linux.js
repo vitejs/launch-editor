@@ -8,6 +8,7 @@ module.exports = {
   cursor: 'cursor',
   trae: 'trae',
   antigravity: 'antigravity',
+  breezell: 'breezell',
   emacs: 'emacs',
   gvim: 'gvim',
   idea: 'idea',
