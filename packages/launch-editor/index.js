@@ -16,6 +16,7 @@ const childProcess = require('child_process')
 const guessEditor = require('./guess')
 const getArgumentsForFile = require('./get-args')
 const constructWindowsLaunchCommand = require('./construct-windows-launch-command')
+const parseFile = require('./parse-file')
 
 function wrapErrorCallback(cb) {
   return (fileName, errorMessage) => {
@@ -42,24 +43,6 @@ function isTerminalEditor(editor) {
   return false
 }
 
-const positionRE = /:(\d+)(:(\d+))?$/
-function parseFile(file) {
-  // support `file://` protocol
-  if (file.startsWith('file://')) {
-    file = require('url').fileURLToPath(file)
-  }
-
-  const fileName = file.replace(positionRE, '')
-  const match = file.match(positionRE)
-  const lineNumber = match && match[1]
-  const columnNumber = match && match[3]
-  return {
-    fileName,
-    lineNumber,
-    columnNumber,
-  }
-}
-
 let currentChildProcess = null
 
 function launchEditor(file, specifiedEditor, onErrorCallback) {
@@ -72,7 +55,7 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
 
   onErrorCallback = wrapErrorCallback(onErrorCallback)
 
-  if (process.platform === 'win32' && path.resolve(fileName).startsWith('\\\\')) {
+  if (process.platform === 'win32' && fileName.startsWith('\\\\')) {
     return onErrorCallback(
       fileName,
       'UNC paths are not supported on Windows to avoid security issues. ' +
