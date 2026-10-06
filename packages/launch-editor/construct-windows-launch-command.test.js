@@ -40,6 +40,32 @@ describe('constructWindowsLaunchCommand', () => {
     )
   })
 
+  for (const [name, lineBreak] of [
+    ['carriage returns', '\r'],
+    ['line feeds', '\n'],
+  ]) {
+    test(`rejects ${name} in arguments`, () => {
+      assert.throws(
+        () => constructWindowsLaunchCommand('code', [`C:\\project\\file.js${lineBreak}calc.exe`]),
+        /argument containing a line break/,
+      )
+    })
+  }
+
+  test('rejects percent signs in arguments', () => {
+    assert.throws(
+      () => constructWindowsLaunchCommand('code', ['C:\\project\\100%\\file.js']),
+      /argument containing "%"/,
+    )
+  })
+
+  test('rejects CMD variable modifiers', () => {
+    assert.throws(
+      () => constructWindowsLaunchCommand('code', ['C:\\project\\%VAR:old=new%']),
+      /argument containing "%"/,
+    )
+  })
+
   test('quotes arguments containing both spaces and escaped CMD metacharacters', () => {
     assert.equal(
       constructWindowsLaunchCommand('code', ['C:\\my project\\&file.js']),

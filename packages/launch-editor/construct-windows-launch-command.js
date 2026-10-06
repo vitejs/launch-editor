@@ -19,7 +19,9 @@
 
 // According to https://ss64.com/nt/syntax-esc.html,
 // we can use `^` to escape `&`, `<`, `>`, `|`, `%`, and `^`
-// I'm not sure if we have to escape all of these, but let's do it anyway
+//
+// `"` cannot appear in Windows paths, so it is outside the untrusted path input
+// this sanitization protects.
 function escapeCmdArgs(cmdArgs) {
   return cmdArgs.replace(/([&|<>,;=^])/g, '^$1')
 }
@@ -41,6 +43,18 @@ function doubleQuoteIfNeeded(str) {
 }
 
 function constructWindowsLaunchCommand(editor, args) {
+  // CMD treats line breaks as command separators. They cannot appear in regular Windows
+  // file names, but NTFS alternate data stream names may contain control characters.
+  if (args.some((arg) => /[\r\n]/.test(arg))) {
+    throw new Error('Cannot launch an editor with an argument containing a line break')
+  }
+
+  // CMD expands expressions such as `%VAR:old=new%` before consuming caret escapes, so
+  // percent signs in arguments cannot be preserved safely and are rejected.
+  if (args.some((arg) => arg.includes('%'))) {
+    throw new Error('Cannot launch an editor with an argument containing "%"')
+  }
+
   return [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
 }
 

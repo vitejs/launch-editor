@@ -93,6 +93,16 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
   const extraArgs = getArgumentsForFile(editor, fileName, lineNumber, columnNumber)
   args.push.apply(args, extraArgs)
 
+  let launchCommand
+  if (process.platform === 'win32') {
+    try {
+      launchCommand = constructWindowsLaunchCommand(editor, args)
+    } catch (error) {
+      onErrorCallback(fileName, error.message)
+      return
+    }
+  }
+
   if (currentChildProcess && isTerminalEditor(editor)) {
     // There's an existing editor process already and it's attached
     // to the terminal, so go kill it. Otherwise two separate editor
@@ -101,7 +111,6 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
   }
 
   if (process.platform === 'win32') {
-    const launchCommand = constructWindowsLaunchCommand(editor, args)
     currentChildProcess = childProcess.exec(launchCommand, {
       stdio: 'inherit',
       shell: true,
