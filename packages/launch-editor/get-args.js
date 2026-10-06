@@ -3,6 +3,8 @@ const path = require('path')
 
 // normalize a file and optional line/column numbers into command line args for specific editors
 module.exports = function getArgumentsForFile(editor, fileName, lineNumber, columnNumber = 1) {
+  fileName = path.resolve(fileName)
+
   if (
     process.platform === 'linux' &&
     fileName.startsWith('/mnt/') &&
@@ -14,7 +16,7 @@ module.exports = function getArgumentsForFile(editor, fileName, lineNumber, colu
     // build of WSL, see: https://github.com/Microsoft/BashOnWindows/issues/423#issuecomment-221627364
     // When a Windows editor is specified, interop functionality can
     // handle the path translation, but only if a relative path is used.
-    fileName = path.relative('', fileName)
+    fileName = `./${path.relative('', fileName)}`
   }
 
   if (!lineNumber) {
