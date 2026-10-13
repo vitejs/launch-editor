@@ -71,6 +71,7 @@ To launch files, send requests to the server like the following:
 | `code-insiders` | [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/) |   ✓   |    ✓    |   ✓   |
 | `codium`        | [VSCodium](https://github.com/VSCodium/vscodium)                       |   ✓   |    ✓    |   ✓   |
 | `cursor`        | [Cursor](https://www.cursor.com/)                                      |   ✓   |    ✓    |   ✓   |
+| `windsurf`      | [Windsurf](https://windsurf.ai/)                                       |   ✓   |    ✓    |   ✓   |
 | `emacs`         | [Emacs](https://www.gnu.org/software/emacs/)                           |   ✓   |         |       |
 | `idea`          | [IDEA](https://www.jetbrains.com/idea/)                                |   ✓   |    ✓    |   ✓   |
 | `notepad++`     | [Notepad++](https://notepad-plus-plus.org/download/v7.5.4.html)        |       |    ✓    |       |
