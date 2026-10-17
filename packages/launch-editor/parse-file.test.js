@@ -17,6 +17,14 @@ describe('launchEditor path resolution', () => {
     })
   })
 
+  test('parses file URLs without a drive letter', () => {
+    assert.deepEqual(parseFile('file:///foo/bar.js:10:5'), {
+      fileName: path.resolve('/foo/bar.js'),
+      lineNumber: '10',
+      columnNumber: '5',
+    })
+  })
+
   test('resolves a parent-directory component created by a position suffix', () => {
     const project = path.resolve('project')
     const file = `${project}${path.sep}attacker-controlled${path.sep}..:1:1`
