@@ -117,8 +117,11 @@ describe('getArgumentsForFile', () => {
       'Code - Insiders',
       'codium',
       'trae',
+      'Trae',
       'antigravity',
+      'Antigravity',
       'cursor',
+      'Cursor',
       'vscodium',
       'VSCodium',
     ]) {
@@ -169,6 +172,15 @@ describe('getArgumentsForFile', () => {
           `${absoluteFileName}:10:5`,
         ])
       })
+
+      for (const editor of ['Cursor', 'Trae', 'Antigravity']) {
+        test(`resolves a full Windows path to ${editor}.exe`, () => {
+          assert.deepEqual(
+            getArgumentsForFile(`C:\\path\\${editor}.exe`, absoluteFileName, 10, 5),
+            ['-r', '-g', `${absoluteFileName}:10:5`],
+          )
+        })
+      }
 
       test('resolves notepad++ from a full path with .exe', () => {
         assert.deepEqual(getArgumentsForFile('C:\\tools\\notepad++.exe', absoluteFileName, 10, 5), [
