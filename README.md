@@ -63,6 +63,7 @@ To launch files, send requests to the server like the following:
 | Value           | Editor                                                                 | Linux | Windows | macOS |
 | --------------- | ---------------------------------------------------------------------- | :---: | :-----: | :---: |
 | `appcode`       | [AppCode](https://www.jetbrains.com/objc/)                             |       |         |   ✓   |
+| `athas`         | [Athas](https://athas.dev/)                                            |   ✓   |    ✓    |   ✓   |
 | `atom`          | [Atom](https://atom.io/)                                               |   ✓   |    ✓    |   ✓   |
 | `atom-beta`     | [Atom Beta](https://atom.io/beta)                                      |       |         |   ✓   |
 | `brackets`      | [Brackets](http://brackets.io/)                                        |   ✓   |    ✓    |   ✓   |
