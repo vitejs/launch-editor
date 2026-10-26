@@ -56,8 +56,11 @@ module.exports = function getArgumentsForFile(editor, fileName, lineNumber, colu
     case 'Code - Insiders':
     case 'codium':
     case 'trae':
+    case 'Trae':
     case 'antigravity':
+    case 'Antigravity':
     case 'cursor':
+    case 'Cursor':
     case 'vscodium':
     case 'VSCodium':
       return ['-r', '-g', `${fileName}:${lineNumber}:${columnNumber}`]
