@@ -27,4 +27,5 @@ module.exports = {
   rider: 'rider',
   'rider.sh': 'rider',
   zed: 'zed',
+  windsurf: 'windsurf'
 }
