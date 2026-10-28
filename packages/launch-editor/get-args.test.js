@@ -118,6 +118,8 @@ describe('getArgumentsForFile', () => {
       'codium',
       'trae',
       'antigravity',
+      'breezell',
+      'Breezell',
       'cursor',
       'vscodium',
       'VSCodium',

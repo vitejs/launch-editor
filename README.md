@@ -66,6 +66,7 @@ To launch files, send requests to the server like the following:
 | `atom`          | [Atom](https://atom.io/)                                               |   ✓   |    ✓    |   ✓   |
 | `atom-beta`     | [Atom Beta](https://atom.io/beta)                                      |       |         |   ✓   |
 | `brackets`      | [Brackets](http://brackets.io/)                                        |   ✓   |    ✓    |   ✓   |
+| `breezell`      | [Breezell](https://breezell.com/)                                      |   ✓   |    ✓    |   ✓   |
 | `clion`         | [Clion](https://www.jetbrains.com/clion/)                              |       |    ✓    |   ✓   |
 | `code`          | [Visual Studio Code](https://code.visualstudio.com/)                   |   ✓   |    ✓    |   ✓   |
 | `code-insiders` | [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/) |   ✓   |    ✓    |   ✓   |
