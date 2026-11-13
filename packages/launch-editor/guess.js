@@ -38,8 +38,28 @@ function getEditorFromMacProcesses(output) {
   return undefined
 }
 
-function getEditorFromWindowsProcesses(output) {
-  const runningProcesses = output.split('\r\n')
+function getWindowsProcessPaths() {
+  try {
+    return require('fast-process-list').getProcessPaths()
+  } catch (ignoreError) {
+    // The optional native addon may be unavailable or fail to enumerate processes.
+  }
+
+  return childProcess
+    .execSync(
+      'powershell -NoProfile -Command "' +
+        '[Console]::OutputEncoding=[Text.Encoding]::UTF8;' +
+        'Get-CimInstance -Query \\"select executablepath from win32_process where executablepath is not null\\" | % { $_.ExecutablePath }' +
+        '"',
+      {
+        stdio: ['pipe', 'pipe', 'ignore'],
+      },
+    )
+    .toString()
+    .split('\r\n')
+}
+
+function getEditorFromWindowsProcesses(runningProcesses) {
   for (let i = 0; i < runningProcesses.length; i++) {
     const fullProcessPath = runningProcesses[i].trim()
     const shortProcessName = path.win32.basename(fullProcessPath)
@@ -77,7 +97,7 @@ function guessEditor(specifiedEditor) {
 
   // We can find out which editor is currently running by:
   // `ps x` on macOS and Linux
-  // `Get-Process` on Windows
+  // `fast-process-list` or PowerShell on Windows
   try {
     if (process.platform === 'darwin') {
       const output = childProcess
@@ -90,18 +110,7 @@ function guessEditor(specifiedEditor) {
         return [editor]
       }
     } else if (process.platform === 'win32') {
-      const output = childProcess
-        .execSync(
-          'powershell -NoProfile -Command "' +
-            '[Console]::OutputEncoding=[Text.Encoding]::UTF8;' +
-            'Get-CimInstance -Query \\"select executablepath from win32_process where executablepath is not null\\" | % { $_.ExecutablePath }' +
-            '"',
-          {
-            stdio: ['pipe', 'pipe', 'ignore'],
-          },
-        )
-        .toString()
-      const editor = getEditorFromWindowsProcesses(output)
+      const editor = getEditorFromWindowsProcesses(getWindowsProcessPaths())
       if (editor !== undefined) {
         return [editor]
       }

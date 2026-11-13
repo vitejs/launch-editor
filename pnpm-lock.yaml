@@ -32,6 +32,10 @@ importers:
       shell-quote:
         specifier: ^1.10.0
         version: 1.11.0
+    optionalDependencies:
+      fast-process-list:
+        specifier: ^0.1.0
+        version: 0.1.0
 
   packages/launch-editor-middleware:
     dependencies:
@@ -312,6 +316,12 @@ packages:
   execa@0.8.0:
     resolution: {integrity: sha512-zDWS+Rb1E8BlqqhALSt9kUhss8Qq4nN3iof3gsOdyINksElaPyNBtKUMTR62qhvgVWR0CqCX7sdnKe4MnUbFEA==}
     engines: {node: '>=4'}
+
+  fast-process-list@0.1.0:
+    resolution: {integrity: sha512-QcBUHYOnz1qS9JLogm3VDKJ5ho1slt9TjDuou6kKBOykTEqWJIcwa+D9VB1sl1W6V6ylwwdlNqz7rE7G9j41gw==}
+    engines: {node: '>=20'}
+    cpu: [x64, arm64]
+    os: [win32]
 
   fdir@6.5.0:
     resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
@@ -631,6 +641,9 @@ snapshots:
       p-finally: 1.0.0
       signal-exit: 3.0.7
       strip-eof: 1.0.0
+
+  fast-process-list@0.1.0:
+    optional: true
 
   fdir@6.5.0(picomatch@4.0.7):
     optionalDependencies:

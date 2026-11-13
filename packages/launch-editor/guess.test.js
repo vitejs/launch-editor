@@ -39,12 +39,12 @@ describe('getEditorFromMacProcesses', () => {
 describe('getEditorFromWindowsProcesses', () => {
   test('returns the full executable path of a known editor', () => {
     const codePath = 'C:\\Program Files\\Microsoft VS Code\\Code.exe'
-    const output = ['C:\\Windows\\System32\\svchost.exe', codePath].join('\r\n')
+    const output = ['C:\\Windows\\System32\\svchost.exe', codePath]
     assert.equal(getEditorFromWindowsProcesses(output), codePath)
   })
 
   test('returns undefined when no editor is running', () => {
-    const output = ['C:\\Windows\\System32\\svchost.exe', 'C:\\Windows\\explorer.exe'].join('\r\n')
+    const output = ['C:\\Windows\\System32\\svchost.exe', 'C:\\Windows\\explorer.exe']
     assert.equal(getEditorFromWindowsProcesses(output), undefined)
   })
 })

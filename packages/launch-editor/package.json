@@ -23,5 +23,8 @@
   "dependencies": {
     "picocolors": "^1.1.1",
     "shell-quote": "^1.10.0"
+  },
+  "optionalDependencies": {
+    "fast-process-list": "^0.1.0"
   }
 }
