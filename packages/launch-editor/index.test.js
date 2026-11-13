@@ -1,7 +1,7 @@
-const assert = require('node:assert/strict')
-const { describe, test, mock } = require('node:test')
+import assert from 'node:assert/strict'
+import { describe, test, mock } from 'node:test'
 
-const launchEditor = require('./index.js')
+import launchEditor from './index.js'
 
 const UNC_ERROR = 'UNC paths are not supported on Windows to avoid security issues.'
 

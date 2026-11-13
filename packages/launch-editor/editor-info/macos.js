@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   '/Applications/Atom.app/Contents/MacOS/Atom': 'atom',
   '/Applications/Atom Beta.app/Contents/MacOS/Atom Beta':
     '/Applications/Atom Beta.app/Contents/MacOS/Atom Beta',

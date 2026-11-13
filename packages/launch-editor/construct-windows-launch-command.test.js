@@ -1,7 +1,7 @@
-const assert = require('node:assert/strict')
-const { describe, test } = require('node:test')
+import assert from 'node:assert/strict'
+import { describe, test } from 'node:test'
 
-const constructWindowsLaunchCommand = require('./construct-windows-launch-command.js')
+import constructWindowsLaunchCommand from './construct-windows-launch-command.js'
 
 describe('constructWindowsLaunchCommand', () => {
   test('joins the editor and arguments', () => {

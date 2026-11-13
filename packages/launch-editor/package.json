@@ -16,6 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/vitejs/launch-editor.git"
   },
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "node --test --experimental-test-module-mocks"

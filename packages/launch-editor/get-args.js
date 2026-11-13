@@ -1,8 +1,8 @@
-const os = require('os')
-const path = require('path')
+import os from 'node:os'
+import path from 'node:path'
 
 // normalize a file and optional line/column numbers into command line args for specific editors
-module.exports = function getArgumentsForFile(editor, fileName, lineNumber, columnNumber = 1) {
+export default function getArgumentsForFile(editor, fileName, lineNumber, columnNumber = 1) {
   fileName = path.resolve(fileName)
 
   if (

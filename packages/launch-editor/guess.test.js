@@ -1,9 +1,11 @@
-const assert = require('node:assert/strict')
-const { describe, test } = require('node:test')
+import assert from 'node:assert/strict'
+import { describe, test } from 'node:test'
 
-const guessEditor = require('./guess.js')
-const { getEditorFromMacProcesses, getEditorFromWindowsProcesses, getEditorFromLinuxProcesses } =
-  guessEditor
+import {
+  getEditorFromMacProcesses,
+  getEditorFromWindowsProcesses,
+  getEditorFromLinuxProcesses,
+} from './guess.js'
 
 describe('getEditorFromMacProcesses', () => {
   test('maps an exact process path to its CLI command', () => {

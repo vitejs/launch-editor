@@ -1,11 +1,12 @@
-const path = require('path')
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const positionRE = /:(\d+)(:(\d+))?$/
 
-module.exports = function parseFile(file) {
+export default function parseFile(file) {
   // support `file://` protocol
   if (file.startsWith('file://')) {
-    file = require('url').fileURLToPath(file)
+    file = fileURLToPath(file)
   }
 
   const unresolvedFileName = file.replace(positionRE, '')

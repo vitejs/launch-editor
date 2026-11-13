@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   'Brackets.exe',
   'Code.exe',
   'Code - Insiders.exe',

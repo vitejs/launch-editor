@@ -1,9 +1,9 @@
-const assert = require('node:assert/strict')
-const os = require('node:os')
-const path = require('node:path')
-const { describe, test } = require('node:test')
+import assert from 'node:assert/strict'
+import os from 'node:os'
+import path from 'node:path'
+import { describe, test } from 'node:test'
 
-const getArgumentsForFile = require('./get-args.js')
+import getArgumentsForFile from './get-args.js'
 const absoluteFileName = path.resolve('file')
 
 describe('getArgumentsForFile', () => {

@@ -8,8 +8,7 @@
   "env": {
     "builtin": true,
     "es2018": true,
-    "node": true,
-    "commonjs": true
+    "node": true
   },
   "rules": {
     "no-case-declarations": "error",

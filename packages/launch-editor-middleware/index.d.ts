@@ -1,4 +1,4 @@
-import http from 'http'
+import type * as http from 'node:http'
 
 type Middleware = (req: http.IncomingMessage, res: http.ServerResponse) => void
 type ErrorCallback = (fileName: string, errorMessage: string | null) => void
@@ -42,4 +42,4 @@ declare function launchEditorMiddleware(
   onErrorCallback?: ErrorCallback,
 ): Middleware
 
-export = launchEditorMiddleware
+export default launchEditorMiddleware
