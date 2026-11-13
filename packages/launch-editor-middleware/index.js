@@ -15,13 +15,9 @@ module.exports = (specifiedEditor, srcRoot, onErrorCallback) => {
   srcRoot = srcRoot || process.cwd()
 
   return function launchEditorMiddleware(req, res) {
-    let url
-
-    try {
-      const fullUrl = req.url.startsWith('http') ? req.url : `http://localhost${req.url}`
-      url = new URL(fullUrl)
-      // eslint-disable-next-line no-unused-vars
-    } catch (_err) {
+    const fullUrl = req.url.startsWith('http') ? req.url : `http://localhost${req.url}`
+    const url = URL.parse(fullUrl)
+    if (!url) {
       res.statusCode = 500
       res.end(`launch-editor-middleware: invalid URL.`)
       return
