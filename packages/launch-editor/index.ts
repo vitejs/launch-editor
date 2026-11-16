@@ -11,14 +11,16 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import colors from 'picocolors'
-import childProcess from 'node:child_process'
+import childProcess, { type ChildProcess } from 'node:child_process'
 
-import guessEditor from './guess.js'
-import getArgumentsForFile from './get-args.js'
-import constructWindowsLaunchCommand from './construct-windows-launch-command.js'
-import parseFile from './parse-file.js'
+import guessEditor from './guess.ts'
+import getArgumentsForFile from './get-args.ts'
+import constructWindowsLaunchCommand from './construct-windows-launch-command.ts'
+import parseFile from './parse-file.ts'
 
-function wrapErrorCallback(cb) {
+type ErrorCallback = (fileName: string, errorMessage: string | null) => void
+
+function wrapErrorCallback(cb?: ErrorCallback): ErrorCallback {
   return (fileName, errorMessage) => {
     console.log()
     console.log(colors.red('Could not open ' + path.basename(fileName) + ' in the editor.'))
@@ -33,7 +35,7 @@ function wrapErrorCallback(cb) {
   }
 }
 
-function isTerminalEditor(editor) {
+function isTerminalEditor(editor: string) {
   switch (editor) {
     case 'vim':
     case 'emacs':
@@ -43,9 +45,32 @@ function isTerminalEditor(editor) {
   return false
 }
 
-let currentChildProcess = null
+let currentChildProcess: ChildProcess | null = null
 
-function launchEditor(file, specifiedEditor, onErrorCallback) {
+/**
+ * Launch an editor to open a file at a specific line and column.
+ *
+ * @param file File path with optional line and column numbers (e.g.
+ *   "/path/to/file.js:10:2").
+ * @param onErrorCallback Optional callback for handling errors.
+ */
+function launchEditor(file: string, onErrorCallback?: ErrorCallback): void
+
+/**
+ * Launch an editor to open a file at a specific line and column.
+ *
+ * @param file File path with optional line and column numbers (e.g.
+ *   "/path/to/file.js:10:2").
+ * @param specifiedEditor Optional editor command or path to use. Will be
+ *   parsed using `shell-quote`.
+ * @param onErrorCallback Optional callback for handling errors.
+ */
+function launchEditor(file: string, specifiedEditor?: string, onErrorCallback?: ErrorCallback): void
+function launchEditor(
+  file: string,
+  specifiedEditor?: string | ErrorCallback,
+  onErrorCallback?: ErrorCallback,
+): void {
   const { fileName, lineNumber, columnNumber } = parseFile(file)
 
   if (typeof specifiedEditor === 'function') {
@@ -53,10 +78,10 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
     specifiedEditor = undefined
   }
 
-  onErrorCallback = wrapErrorCallback(onErrorCallback)
+  const onError = wrapErrorCallback(onErrorCallback)
 
   if (process.platform === 'win32' && fileName.startsWith('\\\\')) {
-    return onErrorCallback(
+    return onError(
       fileName,
       'UNC paths are not supported on Windows to avoid security issues. ' +
         'See https://github.com/vitejs/launch-editor/tree/main/packages/launch-editor#unc-paths-on-windows for details.',
@@ -69,19 +94,24 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
 
   const [editor, ...args] = guessEditor(specifiedEditor)
   if (!editor) {
-    onErrorCallback(fileName, null)
+    onError(fileName, null)
     return
   }
 
-  const extraArgs = getArgumentsForFile(editor, fileName, lineNumber, columnNumber)
+  const extraArgs = getArgumentsForFile(
+    editor,
+    fileName,
+    lineNumber,
+    columnNumber ?? undefined,
+  ).map(String)
   args.push(...extraArgs)
 
-  let launchCommand
+  let launchCommand: string | undefined
   if (process.platform === 'win32') {
     try {
       launchCommand = constructWindowsLaunchCommand(editor, args)
     } catch (error) {
-      onErrorCallback(fileName, error.message)
+      onError(fileName, (error as Error).message)
       return
     }
   }
@@ -93,11 +123,8 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
     currentChildProcess.kill('SIGKILL')
   }
 
-  if (process.platform === 'win32') {
-    currentChildProcess = childProcess.exec(launchCommand, {
-      stdio: 'inherit',
-      shell: true,
-    })
+  if (launchCommand !== undefined) {
+    currentChildProcess = childProcess.exec(launchCommand)
   } else {
     currentChildProcess = childProcess.spawn(editor, args, { stdio: 'inherit' })
   }
@@ -105,16 +132,16 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
     currentChildProcess = null
 
     if (errorCode) {
-      onErrorCallback(fileName, '(code ' + errorCode + ')')
+      onError(fileName, '(code ' + errorCode + ')')
     }
   })
 
-  currentChildProcess.on('error', function (error) {
+  currentChildProcess.on('error', function (error: NodeJS.ErrnoException) {
     let { code, message } = error
     if ('ENOENT' === code) {
       message = `${message} ('${editor}' command does not exist in 'PATH')`
     }
-    onErrorCallback(fileName, message)
+    onError(fileName, message)
   })
 }
 

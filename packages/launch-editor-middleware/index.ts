@@ -1,4 +1,6 @@
 import type * as http from 'node:http'
+import path from 'node:path'
+import launch from 'launch-editor'
 
 type Middleware = (req: http.IncomingMessage, res: http.ServerResponse) => void
 type ErrorCallback = (fileName: string, errorMessage: string | null) => void
@@ -10,7 +12,7 @@ type ErrorCallback = (fileName: string, errorMessage: string | null) => void
  *
  * @param onErrorCallback Optional callback for handling errors.
  */
-declare function launchEditorMiddleware(onErrorCallback?: ErrorCallback): Middleware
+function launchEditorMiddleware(onErrorCallback?: ErrorCallback): Middleware
 
 /**
  * A middleware to launch an editor to open a file at a specific line and column.
@@ -21,7 +23,7 @@ declare function launchEditorMiddleware(onErrorCallback?: ErrorCallback): Middle
  *   parsed using `shell-quote`.
  * @param onErrorCallback Optional callback for handling errors.
  */
-declare function launchEditorMiddleware(
+function launchEditorMiddleware(
   specifiedEditor?: string,
   onErrorCallback?: ErrorCallback,
 ): Middleware
@@ -36,10 +38,48 @@ declare function launchEditorMiddleware(
  * @param srcRoot Optional source root directory to resolve relative file paths.
  * @param onErrorCallback Optional callback for handling errors.
  */
-declare function launchEditorMiddleware(
+function launchEditorMiddleware(
   specifiedEditor?: string,
   srcRoot?: string,
   onErrorCallback?: ErrorCallback,
 ): Middleware
+function launchEditorMiddleware(
+  specifiedEditor?: string | ErrorCallback,
+  srcRoot?: string | ErrorCallback,
+  onErrorCallback?: ErrorCallback,
+): Middleware {
+  if (typeof specifiedEditor === 'function') {
+    onErrorCallback = specifiedEditor
+    specifiedEditor = undefined
+  }
+
+  if (typeof srcRoot === 'function') {
+    onErrorCallback = srcRoot
+    srcRoot = undefined
+  }
+
+  srcRoot = srcRoot || process.cwd()
+
+  return function middleware(req, res) {
+    const requestUrl = req.url ?? ''
+    const fullUrl = requestUrl.startsWith('http') ? requestUrl : `http://localhost${requestUrl}`
+    const url = URL.parse(fullUrl)
+    if (!url) {
+      res.statusCode = 500
+      res.end(`launch-editor-middleware: invalid URL.`)
+      return
+    }
+
+    const file = url.searchParams.get('file')
+    if (!file) {
+      res.statusCode = 500
+      res.end(`launch-editor-middleware: required query param "file" is missing.`)
+    } else {
+      const resolved = file.startsWith('file://') ? file : path.resolve(srcRoot, file)
+      launch(resolved, specifiedEditor, onErrorCallback)
+      res.end()
+    }
+  }
+}
 
 export default launchEditorMiddleware

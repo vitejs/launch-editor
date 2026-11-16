@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import path from 'node:path'
 
-import parseFile from './parse-file.js'
+import parseFile from './parse-file.ts'
 
 describe('launchEditor path resolution', () => {
   test('does not resolve an empty file name to the working directory', () => {

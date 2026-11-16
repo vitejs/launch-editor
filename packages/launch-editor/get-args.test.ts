@@ -2,7 +2,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
-import getArgumentsForFile from './get-args.js'
+import getArgumentsForFile from './get-args.ts'
 const absoluteFileName = path.resolve('file')
 
 describe('getArgumentsForFile', () => {
@@ -203,7 +203,7 @@ describe('getArgumentsForFile', () => {
 
         test(`${editor} protects an option-like file name ${position}`, () => {
           const args = getArgumentsForFile(editor, fileName, lineNumber, 5)
-          const fileArgument = args.at(-1)
+          const fileArgument = args.at(-1) as string
 
           expect(path.resolve(fileArgument)).toBe(path.resolve(fileName))
           expect(

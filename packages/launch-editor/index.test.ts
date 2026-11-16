@@ -7,7 +7,7 @@ const UNC_ERROR = 'UNC paths are not supported on Windows to avoid security issu
 describe('launchEditor UNC path guard', () => {
   if (process.platform === 'win32') {
     test('rejects UNC paths on Windows via the error callback', () => {
-      const onError = vi.fn()
+      const onError = vi.fn<(fileName: string, errorMessage: string | null) => void>()
 
       launchEditor('\\\\server\\share\\file.js', 'vim', onError)
 
@@ -18,7 +18,7 @@ describe('launchEditor UNC path guard', () => {
     })
 
     test('strips the position suffix before reporting the rejected UNC path', () => {
-      const onError = vi.fn()
+      const onError = vi.fn<(fileName: string, errorMessage: string | null) => void>()
 
       launchEditor('\\\\server\\share\\file.js:10:5', 'vim', onError)
 

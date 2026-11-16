@@ -17,20 +17,22 @@
     "url": "git+https://github.com/vitejs/launch-editor.git"
   },
   "files": [
-    "dist",
-    "index.d.ts"
+    "dist"
   ],
   "type": "module",
   "main": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsdown index.js --no-fixed-extension --no-dts",
+    "build": "tsdown index.ts --no-fixed-extension --dts",
     "prepack": "pnpm run build",
     "test": "vitest run"
   },
   "dependencies": {
     "picocolors": "^1.1.1",
     "shell-quote": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/shell-quote": "^1.7.5"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

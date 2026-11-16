@@ -22,7 +22,7 @@
 //
 // `"` cannot appear in Windows paths, so it is outside the untrusted path input
 // this sanitization protects.
-function escapeCmdArgs(cmdArgs) {
+function escapeCmdArgs(cmdArgs: string) {
   return cmdArgs.replace(/([&|<>,;=^])/g, '^$1')
 }
 
@@ -31,7 +31,7 @@ function escapeCmdArgs(cmdArgs) {
 // However, there's a case that it's concatenated with line number and column number
 // which is separated by `:`. We need to double quote the whole string in this case.
 // Also, if the string contains the escape character `^`, it needs to be quoted, too.
-function doubleQuoteIfNeeded(str) {
+function doubleQuoteIfNeeded(str: string) {
   if (str.includes('^')) {
     // If a string includes an escaped character, not only does it need to be quoted,
     // but the quotes need to be escaped too.
@@ -42,7 +42,7 @@ function doubleQuoteIfNeeded(str) {
   return str
 }
 
-function constructWindowsLaunchCommand(editor, args) {
+function constructWindowsLaunchCommand(editor: string, args: string[]) {
   // CMD treats line breaks as command separators. They cannot appear in regular Windows
   // file names, but NTFS alternate data stream names may contain control characters.
   if (args.some((arg) => /[\r\n]/.test(arg))) {

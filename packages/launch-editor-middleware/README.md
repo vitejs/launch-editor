@@ -20,7 +20,7 @@ Both the line and column numbers are optional. `file://` URIs are also supported
 
 ## API
 
-See [`index.d.ts`](./index.d.ts) for the full type definitions and the available arguments.
+See [`index.ts`](https://github.com/vitejs/launch-editor/blob/main/packages/launch-editor-middleware/index.ts) for the full type definitions and the available arguments.
 
 ## Custom editor support
 

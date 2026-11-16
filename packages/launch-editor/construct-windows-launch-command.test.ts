@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
-import constructWindowsLaunchCommand from './construct-windows-launch-command.js'
+import constructWindowsLaunchCommand from './construct-windows-launch-command.ts'
 
 describe('constructWindowsLaunchCommand', () => {
   test('joins the editor and arguments', () => {

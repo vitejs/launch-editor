@@ -4,7 +4,7 @@ import {
   getEditorFromMacProcesses,
   getEditorFromWindowsProcesses,
   getEditorFromLinuxProcesses,
-} from './guess.js'
+} from './guess.ts'
 
 describe('getEditorFromMacProcesses', () => {
   test('maps an exact process path to its CLI command', () => {
