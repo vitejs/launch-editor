@@ -1,5 +1,4 @@
-import assert from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { describe, expect, test } from 'vitest'
 
 import {
   getEditorFromMacProcesses,
@@ -14,14 +13,14 @@ describe('getEditorFromMacProcesses', () => {
       '/Applications/Visual Studio Code.app/Contents/MacOS/Code',
       '/usr/sbin/cfprefsd',
     ].join('\n')
-    assert.equal(getEditorFromMacProcesses(output), 'code')
+    expect(getEditorFromMacProcesses(output)).toBe('code')
   })
 
   test('uses the CLI command for an install outside /Applications', () => {
     // `Atom` maps to the short command `atom`, so even when running from a
     // custom location we should return that command.
     const output = ['/sbin/launchd', '/Users/me/dev/Atom.app/Contents/MacOS/Atom'].join('\n')
-    assert.equal(getEditorFromMacProcesses(output), 'atom')
+    expect(getEditorFromMacProcesses(output)).toBe('atom')
   })
 
   test('returns the running process path when the map points at itself', () => {
@@ -29,12 +28,12 @@ describe('getEditorFromMacProcesses', () => {
     // /Applications we should return the actual running path.
     const runningPath = '/Users/me/dev/CLion.app/Contents/MacOS/clion'
     const output = ['/sbin/launchd', runningPath].join('\n')
-    assert.equal(getEditorFromMacProcesses(output), runningPath)
+    expect(getEditorFromMacProcesses(output)).toBe(runningPath)
   })
 
   test('returns undefined when no editor is running', () => {
     const output = ['/sbin/launchd', '/usr/sbin/cfprefsd'].join('\n')
-    assert.equal(getEditorFromMacProcesses(output), undefined)
+    expect(getEditorFromMacProcesses(output)).toBeUndefined()
   })
 })
 
@@ -42,33 +41,33 @@ describe('getEditorFromWindowsProcesses', () => {
   test('returns the full executable path of a known editor', () => {
     const codePath = 'C:\\Program Files\\Microsoft VS Code\\Code.exe'
     const output = ['C:\\Windows\\System32\\svchost.exe', codePath].join('\r\n')
-    assert.equal(getEditorFromWindowsProcesses(output), codePath)
+    expect(getEditorFromWindowsProcesses(output)).toBe(codePath)
   })
 
   test('returns undefined when no editor is running', () => {
     const output = ['C:\\Windows\\System32\\svchost.exe', 'C:\\Windows\\explorer.exe'].join('\r\n')
-    assert.equal(getEditorFromWindowsProcesses(output), undefined)
+    expect(getEditorFromWindowsProcesses(output)).toBeUndefined()
   })
 })
 
 describe('getEditorFromLinuxProcesses', () => {
   test('maps a process name to its CLI command', () => {
     const output = ['systemd', 'code', 'bash'].join('\n')
-    assert.equal(getEditorFromLinuxProcesses(output), 'code')
+    expect(getEditorFromLinuxProcesses(output)).toBe('code')
   })
 
   test('maps sublime_text to subl', () => {
     const output = ['systemd', 'sublime_text'].join('\n')
-    assert.equal(getEditorFromLinuxProcesses(output), 'subl')
+    expect(getEditorFromLinuxProcesses(output)).toBe('subl')
   })
 
   test('matches code-insiders before code due to key order', () => {
     const output = ['systemd', 'code-insiders'].join('\n')
-    assert.equal(getEditorFromLinuxProcesses(output), 'code-insiders')
+    expect(getEditorFromLinuxProcesses(output)).toBe('code-insiders')
   })
 
   test('returns undefined when no editor is running', () => {
     const output = ['systemd', 'bash', 'sshd'].join('\n')
-    assert.equal(getEditorFromLinuxProcesses(output), undefined)
+    expect(getEditorFromLinuxProcesses(output)).toBeUndefined()
   })
 })

@@ -14,6 +14,7 @@
     "oxfmt": "^0.65.0",
     "oxlint": "^1.80.0",
     "tsdown": "^0.23.7",
+    "vitest": "^4.1.12",
     "yorkie": "^2.0.0"
   },
   "lint-staged": {
