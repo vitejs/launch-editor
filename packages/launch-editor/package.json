@@ -16,9 +16,16 @@
     "type": "git",
     "url": "git+https://github.com/vitejs/launch-editor.git"
   },
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "index.d.ts",
   "scripts": {
+    "build": "tsdown index.js --no-fixed-extension --no-dts",
+    "prepack": "pnpm run build",
     "test": "node --test --experimental-test-module-mocks"
   },
   "dependencies": {

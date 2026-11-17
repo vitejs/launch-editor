@@ -2,6 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "pnpm -r build",
     "test": "pnpm -r test",
     "release": "bumpp",
     "lint": "oxlint --fix",
@@ -12,6 +13,7 @@
     "lint-staged": "^17.4.1",
     "oxfmt": "^0.65.0",
     "oxlint": "^1.80.0",
+    "tsdown": "^0.23.7",
     "yorkie": "^2.0.0"
   },
   "lint-staged": {

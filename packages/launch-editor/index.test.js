@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, test, mock } from 'node:test'
 
-import launchEditor from './index.js'
+import launchEditor from './dist/index.js'
 
 const UNC_ERROR = 'UNC paths are not supported on Windows to avoid security issues.'
 

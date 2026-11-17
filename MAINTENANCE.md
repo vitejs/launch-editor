@@ -29,7 +29,7 @@ The release command is defined in [`package.json`](./package.json) and uses [`bu
 It will:
 
 1. Bump both package versions.
-2. Run `pnpm test`.
+2. Run `pnpm build` and `pnpm test`.
 3. Create commit `vX.Y.Z`.
 4. Create tag `vX.Y.Z`.
 5. Push the commit and tag to `origin`.
@@ -52,7 +52,7 @@ Publishing is handled by [`publish.yml`](./.github/workflows/publish.yml).
 When a tag like `v2.13.3` is pushed, GitHub Actions will:
 
 1. Install dependencies with pnpm.
-2. Run the test suite.
+2. Build each package through its `prepack` script.
 3. Publish the workspace packages with `pnpm -r publish --access public --provenance --no-git-checks`.
 
 `pnpm -r publish` runs in topological order, so `launch-editor` is published before `launch-editor-middleware`.
@@ -66,7 +66,15 @@ pnpm release --no-push
 pnpm exec bumpp --release minor -y --no-push
 ```
 
-Check the current workspace tests:
+Build both packages with tsdown using Node.js 22.18+, 24.11+, or 26+:
+
+```bash
+pnpm build
+```
+
+Each package bundles its JavaScript into `dist/index.js`. Runtime dependencies remain external, and the handwritten `index.d.ts` declarations are published alongside the bundle. Packing or publishing a package runs its build automatically.
+
+Run the workspace tests after building:
 
 ```bash
 pnpm test

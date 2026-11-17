@@ -6,7 +6,7 @@ const noop = () => {}
 mock.module('launch-editor', {
   defaultExport: noop,
 })
-const { default: launchEditorMiddleware } = await import('./index.js')
+const { default: launchEditorMiddleware } = await import('./dist/index.js')
 
 const STATUS_NOT_ALTERED = -1
 class MockResponse {
