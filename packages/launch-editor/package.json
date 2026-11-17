@@ -23,5 +23,8 @@
   "dependencies": {
     "picocolors": "^1.1.1",
     "shell-quote": "^1.10.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
   }
 }
