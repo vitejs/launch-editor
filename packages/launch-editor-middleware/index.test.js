@@ -1,12 +1,18 @@
-import assert from 'node:assert/strict'
-import { describe, test, mock } from 'node:test'
+import path from 'node:path'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+
+import launch from 'launch-editor'
+import launchEditorMiddleware from './dist/index.js'
 
 const noop = () => {}
 
-mock.module('launch-editor', {
-  defaultExport: noop,
+vi.mock('launch-editor', () => ({
+  default: vi.fn(),
+}))
+
+afterEach(() => {
+  vi.clearAllMocks()
 })
-const { default: launchEditorMiddleware } = await import('./dist/index.js')
 
 const STATUS_NOT_ALTERED = -1
 class MockResponse {
@@ -35,8 +41,8 @@ describe('launchEditorMiddleware', () => {
 
     middleware(req, res)
 
-    assert.equal(res.statusCode, 500)
-    assert.equal(res.body, 'launch-editor-middleware: required query param "file" is missing.')
+    expect(res.statusCode).toBe(500)
+    expect(res.body).toBe('launch-editor-middleware: required query param "file" is missing.')
   })
 
   test('launches editor with specified file', async () => {
@@ -48,8 +54,9 @@ describe('launchEditorMiddleware', () => {
 
     middleware(req, res)
 
-    assert.equal(res.statusCode, STATUS_NOT_ALTERED)
-    assert.equal(res.body, '')
+    expect(launch).toHaveBeenCalledExactlyOnceWith(path.resolve(file), 'vim', noop)
+    expect(res.statusCode).toBe(STATUS_NOT_ALTERED)
+    expect(res.body).toBe('')
   })
 
   test('falsy file parameter returns 500', async () => {
@@ -60,8 +67,8 @@ describe('launchEditorMiddleware', () => {
 
     middleware(req, res)
 
-    assert.equal(res.statusCode, 500)
-    assert.equal(res.body, 'launch-editor-middleware: required query param "file" is missing.')
+    expect(res.statusCode).toBe(500)
+    expect(res.body).toBe('launch-editor-middleware: required query param "file" is missing.')
   })
 
   test('returns 500 on invalid URL', async () => {
@@ -72,8 +79,8 @@ describe('launchEditorMiddleware', () => {
 
     middleware(req, res)
 
-    assert.equal(res.statusCode, 500)
-    assert.equal(res.body, 'launch-editor-middleware: invalid URL.')
+    expect(res.statusCode).toBe(500)
+    expect(res.body).toBe('launch-editor-middleware: invalid URL.')
   })
 
   test('correctly parse the url even if it contains only the path', async () => {
@@ -85,7 +92,7 @@ describe('launchEditorMiddleware', () => {
 
     middleware(req, res)
 
-    assert.equal(res.statusCode, STATUS_NOT_ALTERED)
-    assert.equal(res.body, '')
+    expect(res.statusCode).toBe(STATUS_NOT_ALTERED)
+    expect(res.body).toBe('')
   })
 })

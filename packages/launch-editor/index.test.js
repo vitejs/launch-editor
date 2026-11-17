@@ -1,5 +1,4 @@
-import assert from 'node:assert/strict'
-import { describe, test, mock } from 'node:test'
+import { describe, expect, test, vi } from 'vitest'
 
 import launchEditor from './dist/index.js'
 
@@ -8,43 +7,43 @@ const UNC_ERROR = 'UNC paths are not supported on Windows to avoid security issu
 describe('launchEditor UNC path guard', () => {
   if (process.platform === 'win32') {
     test('rejects UNC paths on Windows via the error callback', () => {
-      const onError = mock.fn()
+      const onError = vi.fn()
 
       launchEditor('\\\\server\\share\\file.js', 'vim', onError)
 
-      assert.equal(onError.mock.callCount(), 1)
-      const [fileName, message] = onError.mock.calls[0].arguments
-      assert.equal(fileName, '\\\\server\\share\\file.js')
-      assert.ok(message.includes(UNC_ERROR))
+      expect(onError).toHaveBeenCalledOnce()
+      const [fileName, message] = onError.mock.calls[0]
+      expect(fileName).toBe('\\\\server\\share\\file.js')
+      expect(message).toContain(UNC_ERROR)
     })
 
     test('strips the position suffix before reporting the rejected UNC path', () => {
-      const onError = mock.fn()
+      const onError = vi.fn()
 
       launchEditor('\\\\server\\share\\file.js:10:5', 'vim', onError)
 
-      assert.equal(onError.mock.callCount(), 1)
-      const [fileName, message] = onError.mock.calls[0].arguments
-      assert.equal(fileName, '\\\\server\\share\\file.js')
-      assert.ok(message.includes(UNC_ERROR))
+      expect(onError).toHaveBeenCalledOnce()
+      const [fileName, message] = onError.mock.calls[0]
+      expect(fileName).toBe('\\\\server\\share\\file.js')
+      expect(message).toContain(UNC_ERROR)
     })
 
     test('does not treat a normal absolute Windows path as UNC', () => {
-      const onError = mock.fn()
+      const onError = vi.fn()
 
       // Non-existent file: without the UNC guard firing, launchEditor returns
       // silently at the `fs.existsSync` check without invoking the callback.
       launchEditor('C:\\Users\\me\\does-not-exist-xyz.js', 'vim', onError)
 
-      assert.equal(onError.mock.callCount(), 0)
+      expect(onError).not.toHaveBeenCalled()
     })
   } else {
     test('does not apply the UNC guard on non-Windows platforms', () => {
-      const onError = mock.fn()
+      const onError = vi.fn()
 
       launchEditor('\\\\server\\share\\does-not-exist-xyz.js', 'vim', onError)
 
-      assert.equal(onError.mock.callCount(), 0)
+      expect(onError).not.toHaveBeenCalled()
     })
   }
 })

@@ -1,22 +1,21 @@
-import assert from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { describe, expect, test } from 'vitest'
 
 import constructWindowsLaunchCommand from './construct-windows-launch-command.js'
 
 describe('constructWindowsLaunchCommand', () => {
   test('joins the editor and arguments', () => {
-    assert.equal(
-      constructWindowsLaunchCommand('code', ['--reuse-window', 'C:\\project\\file.js']),
+    expect(constructWindowsLaunchCommand('code', ['--reuse-window', 'C:\\project\\file.js'])).toBe(
       'code --reuse-window C:\\project\\file.js',
     )
   })
 
   test('quotes an editor path and arguments containing spaces', () => {
-    assert.equal(
+    expect(
       constructWindowsLaunchCommand('C:\\Program Files\\Microsoft VS Code\\Code.exe', [
         '--reuse-window',
         'C:\\my project\\file.js',
       ]),
+    ).toBe(
       '"C:\\Program Files\\Microsoft VS Code\\Code.exe" --reuse-window "C:\\my project\\file.js"',
     )
   })
@@ -29,13 +28,12 @@ describe('constructWindowsLaunchCommand', () => {
     ['square-bracket route parameters', '[slug]\\page.tsx'],
   ]) {
     test(`supports ${useCase}`, () => {
-      assert.equal(constructWindowsLaunchCommand('code', [fileName]), `code ${fileName}`)
+      expect(constructWindowsLaunchCommand('code', [fileName])).toBe(`code ${fileName}`)
     })
   }
 
   test('escapes CMD metacharacters in arguments', () => {
-    assert.equal(
-      constructWindowsLaunchCommand('code', ['C:\\project\\&|<>,;=^file.js']),
+    expect(constructWindowsLaunchCommand('code', ['C:\\project\\&|<>,;=^file.js'])).toBe(
       'code ^"C:\\project\\^&^|^<^>^,^;^=^^file.js^"',
     )
   })
@@ -45,30 +43,26 @@ describe('constructWindowsLaunchCommand', () => {
     ['line feeds', '\n'],
   ]) {
     test(`rejects ${name} in arguments`, () => {
-      assert.throws(
-        () => constructWindowsLaunchCommand('code', [`C:\\project\\file.js${lineBreak}calc.exe`]),
-        /argument containing a line break/,
-      )
+      expect(() =>
+        constructWindowsLaunchCommand('code', [`C:\\project\\file.js${lineBreak}calc.exe`]),
+      ).toThrow(/argument containing a line break/)
     })
   }
 
   test('rejects percent signs in arguments', () => {
-    assert.throws(
-      () => constructWindowsLaunchCommand('code', ['C:\\project\\100%\\file.js']),
+    expect(() => constructWindowsLaunchCommand('code', ['C:\\project\\100%\\file.js'])).toThrow(
       /argument containing "%"/,
     )
   })
 
   test('rejects CMD variable modifiers', () => {
-    assert.throws(
-      () => constructWindowsLaunchCommand('code', ['C:\\project\\%VAR:old=new%']),
+    expect(() => constructWindowsLaunchCommand('code', ['C:\\project\\%VAR:old=new%'])).toThrow(
       /argument containing "%"/,
     )
   })
 
   test('quotes arguments containing both spaces and escaped CMD metacharacters', () => {
-    assert.equal(
-      constructWindowsLaunchCommand('code', ['C:\\my project\\&file.js']),
+    expect(constructWindowsLaunchCommand('code', ['C:\\my project\\&file.js'])).toBe(
       'code ^"C:\\my project\\^&file.js^"',
     )
   })

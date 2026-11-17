@@ -1,46 +1,47 @@
-import assert from 'node:assert/strict'
 import os from 'node:os'
 import path from 'node:path'
-import { describe, test } from 'node:test'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import getArgumentsForFile from './get-args.js'
 const absoluteFileName = path.resolve('file')
 
 describe('getArgumentsForFile', () => {
   test('uses an absolute file name as the only argument when no position is given', () => {
-    assert.deepEqual(getArgumentsForFile('vim', absoluteFileName), [absoluteFileName])
+    expect(getArgumentsForFile('vim', absoluteFileName)).toStrictEqual([absoluteFileName])
   })
 
   test('resolves a relative file name to an absolute path', () => {
-    assert.deepEqual(getArgumentsForFile('vim', 'file'), [absoluteFileName])
+    expect(getArgumentsForFile('vim', 'file')).toStrictEqual([absoluteFileName])
   })
 
-  describe('WSL handling', () => {
-    if (process.platform !== 'linux') {
-      return
-    }
+  describe.skipIf(process.platform !== 'linux')('WSL handling', () => {
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
 
-    test('uses a relative path for files on a Windows drive in WSL', (t) => {
-      t.mock.method(process, 'cwd', () => '/home/user/project')
-      t.mock.method(os, 'release', () => '4.4.0-43-Microsoft')
+    test('uses a relative path for files on a Windows drive in WSL', () => {
+      vi.spyOn(process, 'cwd').mockReturnValue('/home/user/project')
+      vi.spyOn(os, 'release').mockReturnValue('4.4.0-43-Microsoft')
 
       const fileName = '/mnt/c/project/file.js'
-      assert.deepEqual(getArgumentsForFile('vim', fileName), ['./../../../mnt/c/project/file.js'])
+      expect(getArgumentsForFile('vim', fileName)).toStrictEqual([
+        './../../../mnt/c/project/file.js',
+      ])
     })
 
-    test('resolves a relative path before converting it for WSL', (t) => {
-      t.mock.method(process, 'cwd', () => '/mnt/c/project')
-      t.mock.method(os, 'release', () => '4.4.0-43-Microsoft')
+    test('resolves a relative path before converting it for WSL', () => {
+      vi.spyOn(process, 'cwd').mockReturnValue('/mnt/c/project')
+      vi.spyOn(os, 'release').mockReturnValue('4.4.0-43-Microsoft')
 
-      assert.deepEqual(getArgumentsForFile('vim', 'file.js'), ['./file.js'])
+      expect(getArgumentsForFile('vim', 'file.js')).toStrictEqual(['./file.js'])
     })
 
-    test('prefixes an option-like relative path on a Windows drive in WSL', (t) => {
-      t.mock.method(process, 'cwd', () => '/mnt/c/project')
-      t.mock.method(os, 'release', () => '4.4.0-43-Microsoft')
+    test('prefixes an option-like relative path on a Windows drive in WSL', () => {
+      vi.spyOn(process, 'cwd').mockReturnValue('/mnt/c/project')
+      vi.spyOn(os, 'release').mockReturnValue('4.4.0-43-Microsoft')
 
       const fileName = '+call system("touch LAUNCH_EDITOR_MARKER")'
-      assert.deepEqual(getArgumentsForFile('vim', fileName), [
+      expect(getArgumentsForFile('vim', fileName)).toStrictEqual([
         './+call system("touch LAUNCH_EDITOR_MARKER")',
       ])
     })
@@ -59,14 +60,14 @@ describe('getArgumentsForFile', () => {
       'zed',
     ]) {
       test(`${editor} uses "file:line:column"`, () => {
-        assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile(editor, absoluteFileName, 10, 5)).toStrictEqual([
           `${absoluteFileName}:10:5`,
         ])
       })
     }
 
     test('notepad++ uses -n/-c flags', () => {
-      assert.deepEqual(getArgumentsForFile('notepad++', absoluteFileName, 10, 5), [
+      expect(getArgumentsForFile('notepad++', absoluteFileName, 10, 5)).toStrictEqual([
         '-n10',
         '-c5',
         absoluteFileName,
@@ -75,7 +76,7 @@ describe('getArgumentsForFile', () => {
 
     for (const editor of ['vim', 'mvim']) {
       test(`${editor} uses +call cursor()`, () => {
-        assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile(editor, absoluteFileName, 10, 5)).toStrictEqual([
           '+call cursor(10, 5)',
           absoluteFileName,
         ])
@@ -84,7 +85,7 @@ describe('getArgumentsForFile', () => {
 
     for (const editor of ['joe', 'gvim']) {
       test(`${editor} uses +line`, () => {
-        assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile(editor, absoluteFileName, 10, 5)).toStrictEqual([
           '+10',
           absoluteFileName,
         ])
@@ -93,7 +94,7 @@ describe('getArgumentsForFile', () => {
 
     for (const editor of ['emacs', 'emacsclient']) {
       test(`${editor} uses +line:column`, () => {
-        assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile(editor, absoluteFileName, 10, 5)).toStrictEqual([
           '+10:5',
           absoluteFileName,
         ])
@@ -102,7 +103,7 @@ describe('getArgumentsForFile', () => {
 
     for (const editor of ['rmate', 'mate', 'mine']) {
       test(`${editor} uses --line`, () => {
-        assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile(editor, absoluteFileName, 10, 5)).toStrictEqual([
           '--line',
           10,
           absoluteFileName,
@@ -123,7 +124,7 @@ describe('getArgumentsForFile', () => {
       'VSCodium',
     ]) {
       test(`${editor} uses -r -g "file:line:column"`, () => {
-        assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile(editor, absoluteFileName, 10, 5)).toStrictEqual([
           '-r',
           '-g',
           `${absoluteFileName}:10:5`,
@@ -133,7 +134,7 @@ describe('getArgumentsForFile', () => {
 
     for (const editor of ['idea', 'idea64', 'webstorm', 'pycharm', 'clion', 'rider']) {
       test(`${editor} uses --line/--column`, () => {
-        assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile(editor, absoluteFileName, 10, 5)).toStrictEqual([
           '--line',
           10,
           '--column',
@@ -145,7 +146,7 @@ describe('getArgumentsForFile', () => {
   })
 
   test('defaults columnNumber to 1 when omitted', () => {
-    assert.deepEqual(getArgumentsForFile('code', absoluteFileName, 10), [
+    expect(getArgumentsForFile('code', absoluteFileName, 10)).toStrictEqual([
       '-r',
       '-g',
       `${absoluteFileName}:10:1`,
@@ -154,7 +155,7 @@ describe('getArgumentsForFile', () => {
 
   describe('editor resolution via path.basename and extension stripping', () => {
     test('resolves a full POSIX path', () => {
-      assert.deepEqual(getArgumentsForFile('/usr/local/bin/code', absoluteFileName, 10, 5), [
+      expect(getArgumentsForFile('/usr/local/bin/code', absoluteFileName, 10, 5)).toStrictEqual([
         '-r',
         '-g',
         `${absoluteFileName}:10:5`,
@@ -163,7 +164,7 @@ describe('getArgumentsForFile', () => {
 
     if (process.platform === 'win32') {
       test('resolves a full Windows path with .exe', () => {
-        assert.deepEqual(getArgumentsForFile('C:\\path\\Code.exe', absoluteFileName, 10, 5), [
+        expect(getArgumentsForFile('C:\\path\\Code.exe', absoluteFileName, 10, 5)).toStrictEqual([
           '-r',
           '-g',
           `${absoluteFileName}:10:5`,
@@ -171,16 +172,14 @@ describe('getArgumentsForFile', () => {
       })
 
       test('resolves notepad++ from a full path with .exe', () => {
-        assert.deepEqual(getArgumentsForFile('C:\\tools\\notepad++.exe', absoluteFileName, 10, 5), [
-          '-n10',
-          '-c5',
-          absoluteFileName,
-        ])
+        expect(
+          getArgumentsForFile('C:\\tools\\notepad++.exe', absoluteFileName, 10, 5),
+        ).toStrictEqual(['-n10', '-c5', absoluteFileName])
       })
     }
 
     test('strips .cmd extension case-insensitively', () => {
-      assert.deepEqual(getArgumentsForFile('code.CMD', absoluteFileName, 10, 5), [
+      expect(getArgumentsForFile('code.CMD', absoluteFileName, 10, 5)).toStrictEqual([
         '-r',
         '-g',
         `${absoluteFileName}:10:5`,
@@ -206,11 +205,11 @@ describe('getArgumentsForFile', () => {
           const args = getArgumentsForFile(editor, fileName, lineNumber, 5)
           const fileArgument = args.at(-1)
 
-          assert.equal(path.resolve(fileArgument), path.resolve(fileName))
-          assert.ok(
+          expect(path.resolve(fileArgument)).toBe(path.resolve(fileName))
+          expect(
             path.isAbsolute(fileArgument),
             `unsafe editor arguments: ${JSON.stringify(args)}`,
-          )
+          ).toBe(true)
         })
       }
     }
