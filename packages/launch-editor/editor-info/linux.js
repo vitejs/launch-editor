@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   atom: 'atom',
   Brackets: 'brackets',
   'code-insiders': 'code-insiders',

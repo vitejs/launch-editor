@@ -58,4 +58,4 @@ function constructWindowsLaunchCommand(editor, args) {
   return [editor, ...args.map(escapeCmdArgs)].map(doubleQuoteIfNeeded).join(' ')
 }
 
-module.exports = constructWindowsLaunchCommand
+export default constructWindowsLaunchCommand

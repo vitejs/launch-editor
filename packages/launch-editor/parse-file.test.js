@@ -1,8 +1,8 @@
-const assert = require('node:assert/strict')
-const { describe, test } = require('node:test')
-const path = require('node:path')
+import assert from 'node:assert/strict'
+import { describe, test } from 'node:test'
+import path from 'node:path'
 
-const parseFile = require('./parse-file.js')
+import parseFile from './parse-file.js'
 
 describe('launchEditor path resolution', () => {
   test('does not resolve an empty file name to the working directory', () => {

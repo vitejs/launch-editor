@@ -1,13 +1,13 @@
-const path = require('path')
-const shellQuote = require('shell-quote')
-const childProcess = require('child_process')
+import path from 'node:path'
+import shellQuote from 'shell-quote'
+import childProcess from 'node:child_process'
 
 // Map from full process name to binary that starts the process
 // We can't just re-use full process name, because it will spawn a new instance
 // of the app every time
-const COMMON_EDITORS_MACOS = require('./editor-info/macos')
-const COMMON_EDITORS_LINUX = require('./editor-info/linux')
-const COMMON_EDITORS_WIN = require('./editor-info/windows')
+import COMMON_EDITORS_MACOS from './editor-info/macos.js'
+import COMMON_EDITORS_LINUX from './editor-info/linux.js'
+import COMMON_EDITORS_WIN from './editor-info/windows.js'
 
 function getEditorFromMacProcesses(output) {
   const processList = output.split('\n')
@@ -126,7 +126,5 @@ function guessEditor(specifiedEditor) {
   return [null]
 }
 
-module.exports = guessEditor
-module.exports.getEditorFromMacProcesses = getEditorFromMacProcesses
-module.exports.getEditorFromWindowsProcesses = getEditorFromWindowsProcesses
-module.exports.getEditorFromLinuxProcesses = getEditorFromLinuxProcesses
+export default guessEditor
+export { getEditorFromMacProcesses, getEditorFromWindowsProcesses, getEditorFromLinuxProcesses }

@@ -24,4 +24,4 @@ declare function launchEditor(
   onErrorCallback?: ErrorCallback,
 ): void
 
-export = launchEditor
+export default launchEditor

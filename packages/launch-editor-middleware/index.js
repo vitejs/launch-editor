@@ -1,7 +1,7 @@
-const path = require('path')
-const launch = require('launch-editor')
+import path from 'node:path'
+import launch from 'launch-editor'
 
-module.exports = (specifiedEditor, srcRoot, onErrorCallback) => {
+export default (specifiedEditor, srcRoot, onErrorCallback) => {
   if (typeof specifiedEditor === 'function') {
     onErrorCallback = specifiedEditor
     specifiedEditor = undefined

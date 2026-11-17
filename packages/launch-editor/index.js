@@ -8,15 +8,15 @@
  * Modified by Yuxi Evan You
  */
 
-const fs = require('fs')
-const path = require('path')
-const colors = require('picocolors')
-const childProcess = require('child_process')
+import fs from 'node:fs'
+import path from 'node:path'
+import colors from 'picocolors'
+import childProcess from 'node:child_process'
 
-const guessEditor = require('./guess')
-const getArgumentsForFile = require('./get-args')
-const constructWindowsLaunchCommand = require('./construct-windows-launch-command')
-const parseFile = require('./parse-file')
+import guessEditor from './guess.js'
+import getArgumentsForFile from './get-args.js'
+import constructWindowsLaunchCommand from './construct-windows-launch-command.js'
+import parseFile from './parse-file.js'
 
 function wrapErrorCallback(cb) {
   return (fileName, errorMessage) => {
@@ -118,4 +118,4 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
   })
 }
 
-module.exports = launchEditor
+export default launchEditor

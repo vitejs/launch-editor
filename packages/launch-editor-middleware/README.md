@@ -5,7 +5,7 @@ An express/connect/webpack-dev-server compatible middleware for opening files in
 ## Usage
 
 ```js
-const launchMiddleware = require('launch-editor-middleware')
+import launchMiddleware from 'launch-editor-middleware'
 
 app.use('/__open-in-editor', launchMiddleware())
 ```

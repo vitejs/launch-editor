@@ -20,7 +20,7 @@ On the other hand,`react-dev-utils` includes many other utilities and dependenci
 ## Usage
 
 ```js
-const launch = require('launch-editor')
+import launch from 'launch-editor'
 
 launch(
   // filename:line:column
@@ -41,7 +41,7 @@ launch(
 An express/connect/webpack-dev-server compatible middleware is also available:
 
 ```js
-const launchMiddleware = require('launch-editor-middleware')
+import launchMiddleware from 'launch-editor-middleware'
 
 app.use('/__open-in-editor', launchMiddleware())
 ```

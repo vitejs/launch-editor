@@ -1,12 +1,12 @@
-const assert = require('node:assert/strict')
-const { describe, test, mock } = require('node:test')
+import assert from 'node:assert/strict'
+import { describe, test, mock } from 'node:test'
 
 const noop = () => {}
 
 mock.module('launch-editor', {
   defaultExport: noop,
 })
-const launchEditorMiddleware = require('./index.js')
+const { default: launchEditorMiddleware } = await import('./index.js')
 
 const STATUS_NOT_ALTERED = -1
 class MockResponse {
