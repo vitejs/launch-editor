@@ -10,20 +10,18 @@ const COMMON_EDITORS_LINUX = require('./editor-info/linux')
 const COMMON_EDITORS_WIN = require('./editor-info/windows')
 
 function getEditorFromMacProcesses(output) {
-  const processNames = Object.keys(COMMON_EDITORS_MACOS)
   const processList = output.split('\n')
-  for (let i = 0; i < processNames.length; i++) {
-    const processName = processNames[i]
+  for (const [processName, editor] of Object.entries(COMMON_EDITORS_MACOS)) {
     // Find editor by exact match.
     if (processList.includes(processName)) {
-      return COMMON_EDITORS_MACOS[processName]
+      return editor
     }
     const processNameWithoutApplications = processName.replace('/Applications', '')
     // Find editor installation not in /Applications.
-    if (output.indexOf(processNameWithoutApplications) !== -1) {
+    if (output.includes(processNameWithoutApplications)) {
       // Use the CLI command if one is specified
-      if (processName !== COMMON_EDITORS_MACOS[processName]) {
-        return COMMON_EDITORS_MACOS[processName]
+      if (processName !== editor) {
+        return editor
       }
       // Use a partial match to find the running process path.  If one is found, use the
       // existing path since it can be running from anywhere.
@@ -40,11 +38,11 @@ function getEditorFromMacProcesses(output) {
 
 function getEditorFromWindowsProcesses(output) {
   const runningProcesses = output.split('\r\n')
-  for (let i = 0; i < runningProcesses.length; i++) {
-    const fullProcessPath = runningProcesses[i].trim()
+  for (const runningProcess of runningProcesses) {
+    const fullProcessPath = runningProcess.trim()
     const shortProcessName = path.win32.basename(fullProcessPath)
 
-    if (COMMON_EDITORS_WIN.indexOf(shortProcessName) !== -1) {
+    if (COMMON_EDITORS_WIN.includes(shortProcessName)) {
       return fullProcessPath
     }
   }
@@ -52,11 +50,9 @@ function getEditorFromWindowsProcesses(output) {
 }
 
 function getEditorFromLinuxProcesses(output) {
-  const processNames = Object.keys(COMMON_EDITORS_LINUX)
-  for (let i = 0; i < processNames.length; i++) {
-    const processName = processNames[i]
-    if (output.indexOf(processName) !== -1) {
-      return COMMON_EDITORS_LINUX[processName]
+  for (const [processName, editor] of Object.entries(COMMON_EDITORS_LINUX)) {
+    if (output.includes(processName)) {
+      return editor
     }
   }
   return undefined
@@ -80,27 +76,25 @@ function guessEditor(specifiedEditor) {
   // `Get-Process` on Windows
   try {
     if (process.platform === 'darwin') {
-      const output = childProcess
-        .execSync('ps x -o comm=', {
-          stdio: ['pipe', 'pipe', 'ignore'],
-        })
-        .toString()
+      const output = childProcess.execSync('ps x -o comm=', {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'ignore'],
+      })
       const editor = getEditorFromMacProcesses(output)
       if (editor !== undefined) {
         return [editor]
       }
     } else if (process.platform === 'win32') {
-      const output = childProcess
-        .execSync(
-          'powershell -NoProfile -Command "' +
-            '[Console]::OutputEncoding=[Text.Encoding]::UTF8;' +
-            'Get-CimInstance -Query \\"select executablepath from win32_process where executablepath is not null\\" | % { $_.ExecutablePath }' +
-            '"',
-          {
-            stdio: ['pipe', 'pipe', 'ignore'],
-          },
-        )
-        .toString()
+      const output = childProcess.execSync(
+        'powershell -NoProfile -Command "' +
+          '[Console]::OutputEncoding=[Text.Encoding]::UTF8;' +
+          'Get-CimInstance -Query \\"select executablepath from win32_process where executablepath is not null\\" | % { $_.ExecutablePath }' +
+          '"',
+        {
+          encoding: 'utf8',
+          stdio: ['pipe', 'pipe', 'ignore'],
+        },
+      )
       const editor = getEditorFromWindowsProcesses(output)
       if (editor !== undefined) {
         return [editor]
@@ -109,11 +103,10 @@ function guessEditor(specifiedEditor) {
       // --no-heading No header line
       // x List all processes owned by you
       // -o comm Need only names column
-      const output = childProcess
-        .execSync('ps x --no-heading -o comm --sort=comm', {
-          stdio: ['pipe', 'pipe', 'ignore'],
-        })
-        .toString()
+      const output = childProcess.execSync('ps x --no-heading -o comm --sort=comm', {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'ignore'],
+      })
       const editor = getEditorFromLinuxProcesses(output)
       if (editor !== undefined) {
         return [editor]

@@ -74,7 +74,7 @@ function launchEditor(file, specifiedEditor, onErrorCallback) {
   }
 
   const extraArgs = getArgumentsForFile(editor, fileName, lineNumber, columnNumber)
-  args.push.apply(args, extraArgs)
+  args.push(...extraArgs)
 
   let launchCommand
   if (process.platform === 'win32') {
