@@ -5,11 +5,11 @@ import childProcess from 'node:child_process'
 // Map from full process name to binary that starts the process
 // We can't just re-use full process name, because it will spawn a new instance
 // of the app every time
-import COMMON_EDITORS_MACOS from './editor-info/macos.js'
-import COMMON_EDITORS_LINUX from './editor-info/linux.js'
-import COMMON_EDITORS_WIN from './editor-info/windows.js'
+import COMMON_EDITORS_MACOS from './editor-info/macos.ts'
+import COMMON_EDITORS_LINUX from './editor-info/linux.ts'
+import COMMON_EDITORS_WIN from './editor-info/windows.ts'
 
-function getEditorFromMacProcesses(output) {
+function getEditorFromMacProcesses(output: string) {
   const processList = output.split('\n')
   for (const [processName, editor] of Object.entries(COMMON_EDITORS_MACOS)) {
     // Find editor by exact match.
@@ -36,7 +36,7 @@ function getEditorFromMacProcesses(output) {
   return undefined
 }
 
-function getEditorFromWindowsProcesses(output) {
+function getEditorFromWindowsProcesses(output: string) {
   const runningProcesses = output.split('\r\n')
   for (const runningProcess of runningProcesses) {
     const fullProcessPath = runningProcess.trim()
@@ -49,7 +49,7 @@ function getEditorFromWindowsProcesses(output) {
   return undefined
 }
 
-function getEditorFromLinuxProcesses(output) {
+function getEditorFromLinuxProcesses(output: string) {
   for (const [processName, editor] of Object.entries(COMMON_EDITORS_LINUX)) {
     if (output.includes(processName)) {
       return editor
@@ -58,9 +58,10 @@ function getEditorFromLinuxProcesses(output) {
   return undefined
 }
 
-function guessEditor(specifiedEditor) {
+function guessEditor(specifiedEditor?: string): [string | null, ...string[]] {
   if (specifiedEditor) {
-    return shellQuote.parse(specifiedEditor)
+    const [editor, ...args] = shellQuote.parse(specifiedEditor).map(String)
+    return [editor ?? null, ...args]
   }
 
   if (process.env.LAUNCH_EDITOR) {

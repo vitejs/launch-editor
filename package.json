@@ -4,16 +4,19 @@
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r test",
+    "typecheck": "tsc --noEmit",
     "release": "bumpp",
     "lint": "oxlint --fix",
     "format": "oxfmt"
   },
   "devDependencies": {
+    "@types/node": "^24.19.2",
     "bumpp": "^11.1.0",
     "lint-staged": "^17.4.1",
     "oxfmt": "^0.65.0",
     "oxlint": "^1.80.0",
     "tsdown": "^0.23.7",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.12",
     "yorkie": "^2.0.0"
   },
@@ -21,7 +24,7 @@
     "*": [
       "oxfmt --no-error-on-unmatched-pattern"
     ],
-    "*.js": [
+    "*.{js,ts}": [
       "oxlint --fix"
     ]
   },

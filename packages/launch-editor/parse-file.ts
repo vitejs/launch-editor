@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 const positionRE = /:(\d+)(:(\d+))?$/
 
-export default function parseFile(file) {
+export default function parseFile(file: string) {
   // support `file://` protocol
   if (file.startsWith('file://')) {
     file = fileURLToPath(file)

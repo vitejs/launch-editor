@@ -2,7 +2,12 @@ import os from 'node:os'
 import path from 'node:path'
 
 // normalize a file and optional line/column numbers into command line args for specific editors
-export default function getArgumentsForFile(editor, fileName, lineNumber, columnNumber = 1) {
+export default function getArgumentsForFile(
+  editor: string,
+  fileName: string,
+  lineNumber?: string | number | null,
+  columnNumber: string | number = 1,
+): (string | number)[] {
   fileName = path.resolve(fileName)
 
   if (

@@ -24,12 +24,12 @@ Exact version:
 pnpm exec bumpp --release 2.14.0
 ```
 
-The release command is defined in [`package.json`](./package.json) and uses [`bumpp`](https://www.npmjs.com/package/bumpp) with shared settings in [`bump.config.mjs`](./bump.config.mjs).
+The release command is defined in [`package.json`](./package.json) and uses [`bumpp`](https://www.npmjs.com/package/bumpp) with shared settings in [`bump.config.ts`](./bump.config.ts).
 
 It will:
 
 1. Bump both package versions.
-2. Run `pnpm build` and `pnpm test`.
+2. Run `pnpm build`, `pnpm typecheck`, and `pnpm test`.
 3. Create commit `vX.Y.Z`.
 4. Create tag `vX.Y.Z`.
 5. Push the commit and tag to `origin`.
@@ -72,11 +72,12 @@ Build both packages with tsdown using Node.js 22.18+, 24.11+, or 26+:
 pnpm build
 ```
 
-Each package bundles its JavaScript into `dist/index.js`. Runtime dependencies remain external, and the handwritten `index.d.ts` declarations are published alongside the bundle. Packing or publishing a package runs its build automatically.
+Each package bundles its TypeScript into `dist/index.js` and generates declarations in `dist/index.d.ts`. Runtime dependencies remain external. Packing or publishing a package runs its build automatically.
 
-Run the workspace tests after building:
+Check types and run the workspace tests after building:
 
 ```bash
+pnpm typecheck
 pnpm test
 ```
 
@@ -96,5 +97,5 @@ If the GitHub Actions publish job fails:
 ## Files
 
 - [`package.json`](./package.json)
-- [`bump.config.mjs`](./bump.config.mjs)
+- [`bump.config.ts`](./bump.config.ts)
 - [`.github/workflows/publish.yml`](./.github/workflows/publish.yml)
