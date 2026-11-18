@@ -34,6 +34,8 @@ module.exports = function getArgumentsForFile(editor, fileName, lineNumber, colu
     case 'wstorm':
     case 'charm':
     case 'zed':
+    case 'zeditor':
+    case 'zedit':
       return [`${fileName}:${lineNumber}:${columnNumber}`]
     case 'notepad++':
       return ['-n' + lineNumber, '-c' + columnNumber, fileName]

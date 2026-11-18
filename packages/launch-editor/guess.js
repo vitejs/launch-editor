@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const shellQuote = require('shell-quote')
 const childProcess = require('child_process')
@@ -51,12 +52,38 @@ function getEditorFromWindowsProcesses(output) {
   return undefined
 }
 
-function getEditorFromLinuxProcesses(output) {
+function isExecutableOnPath(command) {
+  const pathDirs = (process.env.PATH || '').split(path.delimiter)
+  return pathDirs.some((pathDir) => {
+    if (!pathDir) {
+      return false
+    }
+    try {
+      fs.accessSync(path.join(pathDir, command), fs.constants.X_OK)
+      return true
+    } catch {
+      return false
+    }
+  })
+}
+
+// A mapping is either a single command or a list of candidates in preference
+// order. The last candidate is the canonical command, used when none of them
+// exist in PATH.
+function resolveCommand(commands, isExecutable) {
+  if (typeof commands === 'string') {
+    return commands
+  }
+  const found = commands.find((command) => isExecutable(command))
+  return found || commands.at(-1)
+}
+
+function getEditorFromLinuxProcesses(output, isExecutable = isExecutableOnPath) {
   const processNames = Object.keys(COMMON_EDITORS_LINUX)
   for (let i = 0; i < processNames.length; i++) {
     const processName = processNames[i]
     if (output.indexOf(processName) !== -1) {
-      return COMMON_EDITORS_LINUX[processName]
+      return resolveCommand(COMMON_EDITORS_LINUX[processName], isExecutable)
     }
   }
   return undefined
