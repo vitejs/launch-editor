@@ -57,6 +57,8 @@ describe('getArgumentsForFile', () => {
       'wstorm',
       'charm',
       'zed',
+      'zeditor',
+      'zedit',
     ]) {
       test(`${editor} uses "file:line:column"`, () => {
         assert.deepEqual(getArgumentsForFile(editor, absoluteFileName, 10, 5), [
