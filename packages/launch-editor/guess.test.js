@@ -60,6 +60,32 @@ describe('getEditorFromLinuxProcesses', () => {
     assert.equal(getEditorFromLinuxProcesses(output), 'subl')
   })
 
+  test('uses zeditor when a distro renamed the zed CLI', () => {
+    const output = ['systemd', 'zed', 'bash'].join('\n')
+    const isExecutable = (command) => command === 'zeditor'
+    assert.equal(getEditorFromLinuxProcesses(output, isExecutable), 'zeditor')
+  })
+
+  test('uses zedit when only that rename exists', () => {
+    const output = ['systemd', 'zed'].join('\n')
+    const isExecutable = (command) => command === 'zedit'
+    assert.equal(getEditorFromLinuxProcesses(output, isExecutable), 'zedit')
+  })
+
+  test('falls back to zed when no renamed CLI exists', () => {
+    const output = ['systemd', 'zed'].join('\n')
+    assert.equal(
+      getEditorFromLinuxProcesses(output, () => false),
+      'zed',
+    )
+  })
+
+  test('does not look up the command for a single-command mapping', () => {
+    const output = ['systemd', 'code'].join('\n')
+    const isExecutable = () => assert.fail('should not be called')
+    assert.equal(getEditorFromLinuxProcesses(output, isExecutable), 'code')
+  })
+
   test('matches code-insiders before code due to key order', () => {
     const output = ['systemd', 'code-insiders'].join('\n')
     assert.equal(getEditorFromLinuxProcesses(output), 'code-insiders')

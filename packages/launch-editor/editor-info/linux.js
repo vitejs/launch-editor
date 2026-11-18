@@ -26,5 +26,7 @@ module.exports = {
   'goland.sh': 'goland',
   rider: 'rider',
   'rider.sh': 'rider',
-  zed: 'zed',
+  // The official binary is `zed`. Some distros rename it to avoid a package
+  // name conflict: https://zed.dev/docs/linux#installing-via-a-package-manager
+  zed: ['zeditor', 'zedit', 'zed'],
 }
